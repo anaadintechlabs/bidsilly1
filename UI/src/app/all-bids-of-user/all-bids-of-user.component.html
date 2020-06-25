@@ -1,0 +1,164 @@
+<div class="main-content">
+  <div class="container">
+      <div class="header">
+          <div class="header_content">
+              <h3 class="header_content_heading">My Bids</h3>
+          </div>
+          <div class="header_action">
+                <button (click)="changeView('block')"  class="header_action_button" [ngClass]="{'active': id===1}" (click)="isClicked(1)">
+                        <i class="fas fa-th"></i>
+                </button>
+                <button (click)="changeView('list')" class="header_action_button" [ngClass]="{'active': id===2}" (click)="isClicked(2)">
+                        <i class="fas fa-th-list"></i>
+                </button>            
+          </div>
+      </div>
+      <div class="row" *ngIf="action=='block'">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">All Bids</h4>
+                      <p class="card-category"> All bids posted by You.</p>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table">
+                              <thead class=" text-primary">
+                                  
+                                <th>
+                                  Product Image
+                                </th>
+                                  <th>
+                                    Product Name
+                                  </th>  
+                                  <th>
+                                    Bid Ammount
+                                  </th>
+                                  <th>
+                                    Comment  
+                                  </th>
+                                  <th>
+                                      Bid Date
+                                  </th>                               
+                                  <!-- <th>
+                                    Action
+                                  </th> -->
+                              </thead>
+                              <tbody>
+                                  <tr *ngFor="let bid of bidList | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }"> 
+                                     <!-- <tr *ngFor="let user of userList  | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }">  -->
+                                   
+                                      <td> <a style="color: #02c2ef !important;" [routerLink]="['/home/productView']" [queryParams]="{ID:bid.product.prodId}"><img [src]="imageUrl+bid.product.mainImage" style="width: 100px;" alt=""></a></td>
+                                     <td>{{ bid.product.prodName}}</td>
+                                     <td> {{ bid.bidAmount }} </td>
+                                     <td>{{ bid.comment }}</td>
+                                     <td>{{ bid.bidDate | date }}</td>
+
+                                      <!-- <td>
+                                            <button (click)="deleteReportedProduct()" title=" Delete Product" class="btn add subCatBtn" type="submit">
+                                                     <i class="fa fa-plus-circle"></i> 
+                                                    Delete Product
+                                                </button>
+                                      </td> -->
+
+                            
+                                  </tr>
+                                  <pagination-controls  (pageChange)="pageChanged($event)"></pagination-controls>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+     </div>
+
+     <div class="row" *ngIf="action=='list'">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngFor="let bid of bidList">
+        <div class="featured-box">
+          <figure>
+            <!-- <div class="icon"> -->
+                <!-- <button (click)="addToWishlist(bid.product.prodId)" class="icon" title=" Add to Wishlist"  data-toggle="modal" [attr.data-target]="login" type="button">
+                    <i class="far fa-heart"></i>
+                </button> -->
+            <!-- </div> -->
+            <a [routerLink]="['/home/productView']" [queryParams]="{ID:bid.product.prodId}"> 
+              <img class="img-fluid" [src]="imageUrl+bid.product.mainImage"></a>
+          </figure>
+        <div class="feature-content">
+          <div class="tg-product">
+              {{ bid.product.category.catName}} > {{ bid.product.subCategory.catName }}
+          </div>
+        <h4><a href="ads-details.html">{{ bid.product.prodName }}</a></h4>
+            <span>Last Updated: {{ bid.product.createdDate | date }}</span>
+              <ul class="address">
+                <li>
+                    <i class="fas fa-map-marker-alt"></i> {{ bid.product.city }}
+                </li>
+                <li>
+                    <i class="fas fa-clock"></i> {{ bid.product.createdDate | date }}
+                </li>
+                <li>
+                    <i class="fas fa-user"></i> {{ bid.user.name }}
+                </li>
+                <li>
+                    <i class="fas fa-tag"></i> {{ bid.product.subCategory.catName }}
+                </li>
+              </ul>
+              <div class="description">
+                <p>{{bid.product.prodDesc | slice:0:80 }}</p>
+              </div>
+              <ul class="address">
+                <li>
+                    <p>Your Bid: </p> {{ bid.bidAmount }}
+                </li>
+                <li>
+                  <p>Your Bid Date: </p> {{ bid.bidDate | date }}
+                </li>
+                <li class="comment">
+                  <p>Comment: </p> {{ bid.comment }}
+                </li>
+              </ul>
+              <!-- <div class="btn-list">
+                  <a class="btn-price" (click)="reportedProduct(bid.product.prodId)" title=" Report this ad" data-toggle="modal" data-target="#reportform">
+                      <i class="fas fa-exclamation-circle"></i> Report Ad</a>
+                
+              </div> -->
+            </div>
+      </div>
+      </div>
+      <div class="row col-sm-12" >
+        <button   type="button" class="loadmore btn btnbox btn-danger" (click)="loadMoreProducts()">Load More</button>
+      </div>
+     </div>
+  </div>
+</div>
+
+<div id="reportform" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Report this ad</h5>
+        <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" [formGroup]="reportedAdForm" (ngSubmit)="reportFormOnSubmit()">
+
+          <div class="form-group">
+            <input type="radio" formControlName="description" value="Offensive Content"> Offensive Content<br>
+            <input type="radio" formControlName="description" value="Duplicate Ad"> Duplicate Ad<br>
+            <input type="radio" formControlName="description" value="Already Sold Product"> Already Sold Product<br>
+            <input type="radio" formControlName="description" value="Damaged Product"> Damaged Product
+           
+          </div>
+          <div class="form-group">
+            <label for="inputAddress2">Comment</label>
+            <input required type="text" autocomplete="off" formControlName="comment" class="form-control" id="productDesc" placeholder="">
+          </div>
+          <button type="submit" class="btn btn-primary">Report</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

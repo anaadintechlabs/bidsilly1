@@ -1,0 +1,8 @@
+.common{
+    width: 100%;
+    background: transparent;
+    border: 3px solid #848484;
+ 
+    margin-bottom: 20px;
+    padding: 10px 15px;
+}

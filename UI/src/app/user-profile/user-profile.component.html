@@ -1,0 +1,211 @@
+<div class="main-content">
+  <div class="container">
+      <div class="header">
+          <div class="header_content">
+              <h3 class="header_content_heading">All Users</h3>
+          </div>
+          <div class="header_action">
+                <!-- <button (click)="changeView('block')"  class="header_action_button" [ngClass]="{'active': id===1}" (click)="isClicked(1)">
+                        <i class="fas fa-th"></i>
+                </button> -->
+                <!-- <button (click)="changeView('list')" class="header_action_button" [ngClass]="{'active': id===2}" (click)="isClicked(2)">
+                        <i class="fas fa-th-list"></i>
+                </button>             -->
+          </div>
+      </div>
+      <div class="row" *ngIf="action=='block'">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">All User</h4>
+                      <p class="card-category">All users that singed up</p>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table">
+                              <thead class=" text-primary">
+                                  
+                                <th>
+                                  Name
+                                </th>
+                                  <th>
+                                    Email 
+                                  </th> 
+                                  <th>
+                                    Sign up through 
+                                  </th>                           
+                                  <th>
+                                     Sign up date
+                                  </th>       
+                                    <th>
+                                     Account Status
+                                  </th>                         
+                                  <th>
+                                    Action
+                                  </th>
+                              </thead>
+                              <tbody>
+                                
+                                  <tr *ngFor="let user of userList  | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }"> 
+                                    <td  data-toggle="modal" data-target="#mybidsDetail" (click)="showUser(user)" style="color: #02c2ef !important;" >{{ user.name}}</td>
+                                     <td> {{ user.email }} </td>
+
+                                      <td *ngIf="user.provider=='local'">Application</td>
+                                      <td *ngIf="user.provider!='local'"> {{ user.provider }} </td>
+                                     <!-- <td>{{ user.email }}</td>
+                                      <td>{{ user.email }}</td> -->
+                                     <td>{{ user.joinDate | date }}</td>
+                                     <td *ngIf="user.deactivated==true" style="color:#f7a40c;" >DEACTIVATED</td>   
+                                      <td *ngIf="!user.deactivated==true" style="color: #1bde1b;">ACTIVE</td>                                                                                
+                                      <td *ngIf="user.deactivated==false && user.provider=='local'">
+                                            <button (click)="blockUser(user.id)" title=" Block User" class="btn add subCatBtn" type="submit">
+                                                    <!-- <i class="fa fa-plus-circle"></i> -->
+                                                    Block User
+                                            </button>
+                                      </td>
+                                        <td *ngIf="user.deactivated==true">
+                                            <button (click)="reactivateUser(user.id)" title=" Block User" class="btn add subCatBtn" type="submit">
+                                                    <!-- <i class="fa fa-plus-circle"></i> -->
+                                                    Reactivate User
+                                            </button>
+                                      </td>
+                            
+                                  </tr>
+                                     <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls> 
+                                     
+                                </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+     </div>
+<!-- 
+     <div class="row" *ngIf="action=='list'">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngFor="let bid of bidList">
+        <div class="featured-box">
+          <figure>
+        
+            <a [routerLink]="['/home/productView']" [queryParams]="{ID:bid.product.prodId}"> 
+              <img class="img-fluid" [src]="imageUrl+bid.product.mainImage"></a>
+          </figure>
+        <div class="feature-content">
+          <div class="tg-product">
+              {{ bid.product.category.catName}} > {{ bid.product.subCategory.catName }}
+          </div>
+        <h4><a href="ads-details.html">{{ bid.product.prodName }}</a></h4>
+            <span>Last Updated: {{ bid.product.createdDate | date }}</span>
+              <ul class="address">
+                <li>
+                    <i class="fas fa-map-marker-alt"></i> {{ bid.product.city }}
+                </li>
+                <li>
+                    <i class="fas fa-clock"></i> {{ bid.product.createdDate | date }}
+                </li>
+                <li>
+                    <i class="fas fa-user"></i> {{ bid.user.name }}
+                </li>
+                <li>
+                    <i class="fas fa-tag"></i> {{ bid.product.subCategory.catName }}
+                </li>
+              </ul>
+              <div class="description">
+                <p>{{bid.product.prodDesc | slice:0:80 }}</p>
+              </div>
+              <ul class="address">
+                <li>
+                    <p>Your Bid: </p> {{ bid.bidAmount }}
+                </li>
+                <li>
+                  <p>Your Bid Date: </p> {{ bid.bidDate | date }}
+                </li>
+                <li class="comment">
+                  <p>Comment: </p> {{ bid.comment }}
+                </li>
+              </ul>
+              <div class="btn-list">
+                  <a class="btn-price" (click)="reportedProduct(bid.product.prodId)" title=" Report this ad" data-toggle="modal" data-target="#reportform">
+                      <i class="fas fa-exclamation-circle"></i> Report Ad</a>
+                 
+              </div>
+            </div>
+      </div>
+      </div>
+     </div> -->
+
+     
+  </div>
+</div>
+
+
+
+
+   <div id="mybidsDetail" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">User Information</h5>
+                  <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                   
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <img [src]="imageUrl + selectedUser.imageUrl" alt="">
+                    </div>
+                    <div class="col-sm-8">
+                      <p><span style="font-weight: 600;">Name : </span> {{selectedUser.name}}</p>
+                      <p><span style="font-weight: 600;">Email : </span> {{selectedUser.email}}</p>
+                      <p><span style="font-weight: 600;">Bio : </span> 
+                        <span *ngIf="selectedUser.bio == null">No Bio Added</span> 
+                        <span *ngIf="selectedUser.bio != null">{{selectedUser.bio}}</span>
+                      </p>
+                      <p><span style="font-weight: 600;">Phone No. : </span> 
+                          <span *ngIf="selectedUser.phoneNumber == null">No contact no. provided</span> 
+                          <span *ngIf="selectedUser.phoneNumber != null">{{selectedUser.phoneNumber}}</span>
+                      </p>  
+                      <p><span style="font-weight: 600;">Login Through : </span> 
+                        <span *ngIf="selectedUser.provider == 'local'">By Application</span> 
+                        <span *ngIf="selectedUser.provider != 'local'">{{selectedUser.provider}}</span>
+                      </p>
+                      <p><span style="font-weight: 600;">Join Date : </span> {{selectedUser.joinDate | date}}</p>  
+                      <p><span style="font-weight: 600;">Activation : </span> 
+                        <span *ngIf="selectedUser.deactivated">Deactivated</span> 
+                        <span *ngIf="!selectedUser.deactivated">Activated</span>
+                      </p>
+                      <p><span style="font-weight: 600;">Account Status : </span> 
+                        <span *ngIf="selectedUser.blocked">Blocked</span> 
+                        <span *ngIf="!selectedUser.blocked">Active</span>
+                      </p>
+                    </div>
+                  </div>
+                    <!-- <form [formGroup]="userForm" >
+
+                        <div class="col-md-12">
+                            <input readonly  matInput autocomplete="off" formControlName="email" class="common"  placeholder="Category Name" type="text">    
+                      </div>
+                      <div class="col-md-12">
+                          <input readonly matInput autocomplete="off"  class="common" formControlName="name" placeholder="Description" type="text">
+                      </div>
+
+                      <div class="col-md-12">
+                            <input readonly matInput autocomplete="off" formControlName="joinDate" class="common"  placeholder="Category Name" type="text">    
+                      </div>
+                      <div class="col-md-12">
+                          <input readonly matInput autocomplete="off"  class="common" formControlName="phoneNumber" placeholder="Description" type="text">
+                      </div>
+
+                       
+                      <!-- <div class="left">
+                        <input type="checkbox" name="Remember Me" id=""> Remember Me
+                      </div> //
+                      
+                      </form> -->
+
+
+                  </div>
+              </div>
+            </div>
+          </div>

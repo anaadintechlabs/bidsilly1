@@ -1,0 +1,75 @@
+<div class="row">
+    <div class="col-md-6 pr-5 pl-5 pt-12">
+      <div class="container">
+      <div class="card card-nav-tabs">
+        <!-- <div class="card-header card-header-info">
+          <h3> Register Here </h3>
+        </div> -->
+        <div class="card-body">
+          <h3 class="card-title">Register Here</h3>
+            <form [formGroup]="signUpForm" (ngSubmit)="registerUser()" >
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                      <label for="inputUsename">UserName</label>
+                      <input formControlName="username" type="text" class="form-control" id="inputEmail4" >
+                    </div> 
+                <div class="form-group col-md-12">
+                  <label for="inputEmail4">Email</label>
+                  <input formControlName="email" type="email" class="form-control" id="inputEmail4" >
+                </div> 
+                <div class="form-group col-md-12">
+                  <label for="inputPassword4">Password</label>
+                  <input formControlName="password" type="password" class="form-control" id="inputPassword4" >
+                </div>
+                <!-- <div class="form-group col-md-6">
+                    <label for="inputPassword4">Confirm Password</label>
+                    <input formControlName="confirmPassword" type="password" class="form-control" id="inputPassword4" >
+                  </div> -->
+              </div>
+
+              <!-- <div class="form-group">
+                <label for="inputAddress">Address</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+              </div>
+              <div class="form-group">
+                <label for="inputAddress2">Address 2</label>
+                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputCity">City</label>
+                  <input type="text" class="form-control" id="inputCity">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="inputState">State</label>
+                  <select id="inputState" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>...</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-2 ml-auto">
+                  <label for="inputZip">Zip</label>
+                  <input type="text" class="form-control" id="inputZip">
+                </div>
+              </div> -->
+              <div class="form-group">
+                <!-- <div class="form-check">
+                  <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" value="">
+                      Check me out
+                      <span class="form-check-sign">
+                        <span class="check"></span>
+                      </span>
+                  </label>
+                </div> -->
+              </div>
+              <button type="submit" class="btn signup">Sign Up</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 p-0 bg-img">
+      <!-- <img src="../../assets/img/BG.jpg"  class="img-fluid full-image" alt=""> -->
+  </div>
+</div>

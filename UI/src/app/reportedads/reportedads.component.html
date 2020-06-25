@@ -1,0 +1,65 @@
+<div class="main-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-danger">
+                            <h4 class="card-title ">Reported Ads</h4>
+                            <p class="card-category"> Here ads reported by users are shown</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class=" text-primary">
+                                        <th>
+                                          Product Name
+                                        </th>  
+                                        <th>
+                                          Reported BY
+                                        </th>
+                                        <th>
+                                          Uploaded BY  
+                                        </th>
+                                        <th>
+                                            Reported Date
+                                        </th>
+                                          <th>
+                                            Reported Count
+                                        </th>
+                                        <th>
+                                            Description
+                                        </th>
+                                     
+                                        <th>
+                                          Action
+                                        </th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let reportedAd of reportedAdsList | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }"> 
+                                           
+                                            <td> <a style="color: #02c2ef !important;" [routerLink]="['/admin/productView']" [queryParams]="{ID:reportedAd.productId.prodId,action:'report',reportId:reportedAd.reportedId}">{{ reportedAd.productId.prodName }}</a></td>
+                                           
+                                              <td>{{ reportedAd.reportedBy }}</td>
+                                            <td>{{ reportedAd.uploadedBy }}</td>
+                                            <td>{{ reportedAd.reportDate|date }}</td>
+                                             <td>{{ reportedAd.reportCount }}</td>
+                                            <td>{{ reportedAd.description }}</td>
+                                            <td>
+                                                  <button (click)="deleteReportedProduct(reportedAd.reportedId)" title=" Delete Product" class="btn add subCatBtn" type="submit">
+                                                          <!-- <i class="fa fa-plus-circle"></i> -->
+                                                          Delete Product
+                                                      </button>
+                                            </td>
+      
+                                  
+                                        </tr>
+                                        <pagination-controls  (pageChange)="pageChanged($event)"></pagination-controls>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+        </div>
+      </div>

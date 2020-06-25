@@ -1,0 +1,145 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="header">
+          <div class="header_content">
+              <h2 class="header_content_heading">All Products</h2>
+          </div>
+          <div class="header_action">
+                <button (click)="changeView('block')" class="header_action_button" [ngClass]="{'active': id===1}" (click)="isClicked(1)">
+                        <i class="fas fa-th"></i>
+                </button>
+                <button (click)="changeView('list')" class="header_action_button" [ngClass]="{'active': id===2}" (click)="isClicked(2)">
+                        <i class="fas fa-th-list"></i>
+                </button>
+                <button (click)="changeView('table')" class="header_action_button" [ngClass]="{'active': id===3}" (click)="isClicked(3)">
+                        <i class="fas fa-table"></i>
+                </button>             
+          </div>
+      </div>
+      <div class="row" *ngIf="action=='table'">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Pending Products</h4>
+                      <p class="card-category"> Products are pending for Approvel.</p>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table">
+                              <thead class=" text-primary">
+                                  <th> Image</th>
+                                  <th> Product Name </th>
+                                  <th>Product Description </th>
+                                  <th>   Price </th>
+                                    <!-- <th> Main Image </th> -->
+                                  <th> Select </th>
+                              </thead>
+                              <tbody>
+                                  <tr *ngFor="let productList of allPendingProductList | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }">
+                                      <td> <img [src]="imageUrl+productList.mainImage" style="width:30px;"></td>
+                                      <td> {{ productList.prodName }}<sup>{{ productList.status}}</sup> </td>
+                                      <td> {{ productList.prodDesc | slice:0:80 }} ..... </td>
+                                      <td> {{ productList.price }}  </td>
+                                      <!-- <td>
+                                          <img [src]="imageUrl+productList.mainImage" height="150" width="200"> -->
+                                        <!-- <div class="row">
+                                        <div class="col-lg-3 col-md-4 col-xs-6 thumb" *ngFor="let elem of (productList.imgNames | splitkey)">
+                                         <a href="">                 
+                                 <img [src]="showImage" height="150" width="200">
+                                    </a>
+                                 </div>
+                                </div>
+                                      </td>  -->
+                                      <td class="text-primary">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="" (change)="saveList($event, productList.prodId)">
+                                                <span class="form-check-sign">
+                                                    <span class="check"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                      </td>
+                                  </tr>
+                                  <pagination-controls  (pageChange)="pageChanged($event)"></pagination-controls>
+                              </tbody>
+                          </table>
+                      </div>
+                    </div>   
+              </div>
+              <button *ngIf="allPendingProductList && allPendingProductList.length>0" (click)="approveProduct()" title="Approve Product" class="btn add subCatBtn" type="submit">
+                Approve Products
+            </button>
+            <button *ngIf="allPendingProductList && allPendingProductList.length>0" (click)="deleteReportedProduct()" title="Approve Product" class="btn add subCatBtn" type="submit">
+                    Delete Products
+                </button>
+          </div>
+          
+
+          
+      </div>
+      <div class="row" *ngIf="action=='block'">
+            <div class="col-md-4 col-lg-3 col-sm-6 col-xs-12" *ngFor="let productList of allPendingProductList">
+              <div class="cardBlock">
+                    <a [routerLink]="['/admin/productView']" [queryParams]="{ID:productList.prodId,action:'approve'}">
+                    <div class="product">
+                      <div class="product_image">
+                          <img class="product_image_top" [src]="imageUrl+productList.mainImage">
+                          <span class="status2" *ngIf="productList.bid==true">Bid Available</span>
+                       </div>
+                       <div class="product_body">
+                          <div class="product_admin">
+                              <img class="product_admin_image" src="../../assets/img/dummy.png">
+                           </div>
+                           <div class="product_description">
+                              <h5 class="product_description_tital">{{ productList.prodName }}</h5>
+                              <p class="product_description_city"><i class="fas fa-map-marker-alt"></i> {{ productList.city | uppercase }} </p>
+                           </div>
+                           <div class="product_price">
+                             <p class="product_price_1">₹ {{ productList.price }}</p>
+                           </div>
+                       </div>
+                    </div>
+                   </a>
+                   <div class="product_action">
+                      <button (click)="approveProductByid(productList.prodId)" title=" Approve this Ad" class="mybutton"  type="button">
+                            <i class="far fa-thumbs-up"></i>
+                      </button> 
+                      <button (click)="deleteReportedProductById(productList.prodId)" title="Delete this Ad" class="mybutton"  type="button">
+                            <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                    
+              </div>
+            </div>
+            
+            <div class="row col-sm-12" *ngIf="count>limit" >
+                    <button   type="button" class="loadmore btn btnbox btn-danger" (click)="loadMoreProducts()">Load More</button>
+                  </div>
+        </div>
+        <div class="row" *ngIf="action=='list'">
+                <div class="col-sm-12" *ngFor="let productList of allPendingProductList">
+                        <div class="card list">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="image col-sm-3">
+                                      <img class="myImg" [src]="imageUrl+productList.mainImage" ><span class="status">{{ productList.status}}</span>
+                                    </div>
+                                    <div class="col-sm-6 detail"> 
+                                        <h3 class="productTital">{{ productList.prodName }}</h3>
+                                        <h6 class="productPrice">Price : INR.{{ productList.price }}</h6>
+                                        <p class="card-text">{{ productList.prodDesc | slice:0:120 }} ..... </p>
+                                    </div>  
+                                    <div class="col-sm-2">
+                                            <button (click)="approveProductByid(productList.prodId)" class="btn add subCatBtn">Approve </button>
+                                            <button (click)="deleteReportedProductById(productList.prodId)" class="btn add subCatBtn">Block </button>
+                                    </div>
+                                </div>  
+                                </div>
+                              </div>
+                </div>
+                <div class="row col-sm-12" *ngIf="count>limit">
+                        <button  type="button"   class="loadmore btn btnbox btn-danger" (click)="loadMoreProducts()">Load More</button>
+                      </div>
+            </div>
+  </div>

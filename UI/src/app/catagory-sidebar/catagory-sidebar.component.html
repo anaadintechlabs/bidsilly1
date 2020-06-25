@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-sm-12">
+      <h2 class="rowHeading">product category</h2>
+      <hr style="width: 60px; margin-bottom: 50px; border-top: 1px solid #b7ff24;">
+  </div>
+  <div class="col-sm-3" *ngFor="let category of categoryListWithCount">
+    <a (click)="performSearch(category[0])" routerLink="/home/allProducts">
+       <div class="box">
+      <div class="box_icon">
+          <img class="box_icon_image" [src]="imageUrl+category[3]">
+      </div>
+      <div  class="box_content">
+        <div class="box_content_heading">{{category[1]}}</div>
+        <div class="box_content_description">{{category[2]}}</div>
+      </div>
+    </div></a>
+  </div>
+</div>
+ 
+
+
+
+<!-- <div class="row">
+    <div class="category">
+      <ul class="category_List">
+        <li class="category_List_Item" *ngFor="let catItem of categoryListWithCount">
+          <img class="category_List_Item_Image" src="../../assets/img/dummy.png" alt="">
+          {{catItem.name}}
+          <div class="category_List_Detail">
+              <p class="category_List_Detail_heading"> Sub-Category</p>
+              <ul class="category_List_Detail_list" *ngFor="let subcat of catItem.subcategory">
+                  <li class="category_List_Detail_list_item"><i class="fas fa-chevron-right"></i> {{ subcat.name }}</li>
+              </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+</div> -->

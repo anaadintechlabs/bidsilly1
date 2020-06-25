@@ -1,0 +1,62 @@
+<div class="main">
+    <div class="container">
+            <div class="row">
+                    <div class="col-sm-3 col-md-2"></div>
+                    <div class="col-sm-6 col-md-8 content">
+                        <div class="heading">
+                            <h1 class="headingLogin">Edit Profile</h1>
+                        </div>
+                        <div class="form">
+                            <form [formGroup]="userForm" (ngSubmit)="submitForm()">
+                                <div class="username com">
+                                    <input autocomplete="off" autofocus  class="common formcontrol" formControlName="name" placeholder="Enter Name" aria-describedby="nameHelp" >
+                                    <i class="fas fa-user"></i>
+                                    <small id="nameHelp" class="form-text text-muted"></small>
+                                </div>
+                                <div class="password com">
+                                    <input autocomplete="off"  formControlName="bio" type="text" class="common formcontrol" aria-describedby="nameHelp" placeholder="Enter Your Bio">
+                                    <i class="fas fa-key"></i>
+                                    <small id="nameHelp" class="form-text text-muted"></small>
+                                </div>
+            
+            
+                                <div class="username com">
+                                    <input autocomplete="off" autofocus  class="common formcontrol" formControlName="email" type='email' readonly  aria-describedby="nameHelp" >
+                                    <i class="fas fa-user"></i> 
+                                    <small id="nameHelp" class="form-text text-muted"></small>
+                                </div>
+                                <div class="password com">
+                                    <input autocomplete="off"  formControlName="phoneNumber"  class="common formcontrol" aria-describedby="nameHelp" placeholder="Enter Phone Number">
+                                    <i class="fas fa-key"></i>
+                                    <small id="nameHelp" class="form-text text-muted"></small>
+                                </div>
+                                <div class="product_image" *ngIf='!directUrl'>
+                                    <img class="product_image_top" [src]="imageUrl+user.imageUrl">
+                                </div>
+                                <div class="product_image" *ngIf='directUrl'>
+                                  <img class="product_image_top" [src]="user.imageUrl">
+                                </div>
+                                        <div class="upload-image">
+                                            <label class=" control-label upload"  for="filebutton">
+                                                    <span>Drop file anywhere to upload <br></span>
+                                                    <span>or<br></span>
+                                                    <input id="filebutton" name="filebutton" #inputFile (change)="onSelectFile($event)" type="file" >
+                                                    <span ><br>(the file size must be less than 2MB)</span>
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <img  *ngFor="let url of urlArray" [src]="url" height="70px" style="padding:10px;"> <br/>
+                                        </div>
+                                    
+                                
+                                     <button type="submit" [disabled]="!userForm.valid" class="saveButton">Save Changes</button>
+                                </form>
+                        </div>
+                        <div class="msg">
+                                MESSAGE: - “We believe in socializing with others, help your connections to get to know more about yourself. Tell them your interest and your favourite things, you would love to know them too…” 
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2"></div>
+                </div>                       
+    </div>
+</div>

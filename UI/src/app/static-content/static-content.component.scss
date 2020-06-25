@@ -1,0 +1,22 @@
+li{
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+li p{
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+li ul li,li ol li{
+    font-size: 14px;
+    padding-bottom: 0;
+    font-weight: 400;
+}
+.privacy ul li,.privacy p{
+    font-size: 14px;
+    padding-bottom: 0;
+    font-weight: 400;
+}
+.main{
+    padding: 80px 0;
+}

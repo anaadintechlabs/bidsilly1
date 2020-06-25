@@ -1,0 +1,65 @@
+<div class="bradcum">
+        <div class="content" *ngIf="headerText">
+            <h2 class="content_heading">Welcome to <span style="width:250px;"> <img style="width: inherit;" src="../../assets/img/Bidsilly Logo.png" alt=""></span></h2>
+            <p class="content_detail">Buy And Sell Everything From Used Cars To Mobile Phones And Computers,<br> 
+                Or Search For Property, Jobs And More</p>
+        </div>
+        <div class="search container" [ngClass]="{'initial-padding': headerText}">
+           <div class="form">
+                <div class="row"> 
+                    <div class="inputwithicon ">
+                        <i class="fas fa-tag"></i>
+                      <input type="text" [(ngModel)]="srchKey" placeholder="Enter Keyword" class="border_left br">
+                    </div>     
+                    <div class="inputwithicon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <input type="text" [(ngModel)]="srchLoc" placeholder="Enter Location" class="br">
+                    </div>
+                    <div class="inputwithicon">
+                            <i class="fas fa-layer-group"></i>
+                            <select [(ngModel)]="srchCat"  name="" id="" >
+                                    <option value="" disabled selected>Select Category</option>
+                                    <option  *ngFor="let category of categoryListWithCount" value="{{category[1]}}">{{category[1]}}</option>
+                                </select>        
+                    </div>
+                    <div class="searchBtn"> 
+                        <button type="submit"  (click)="searchProduct()" class="srchBtn border_right">Search</button>
+                    </div>   
+                </div>
+            </div>
+        </div>      
+    </div> 
+    
+
+ <!-- <div class="bradcum">
+    <div class="content" *ngIf="headerText">
+        <h2 class="content_heading">Welcome to <span style="color:#b7ff24;">Aclassdeal</span></h2>
+        <p class="content_detail">Buy And Sell Everything From Used Cars To Mobile Phones And Computers,<br> 
+            Or Search For Property, Jobs And More</p>
+    </div>
+    <div class="search container" [ngClass]="{'initial-padding': headerText}">
+        <form class="form" [formGroup]="searchForm" (ngSubmit)="searchProduct()" role="form">
+            <div class="row"> 
+                <div class="inputwithicon ">
+                    <i class="fas fa-tag"></i>
+                  <input type="text" formControlName="searchString" placeholder="Enter Keyword" class="border_left br">
+                </div>     
+                <div class="inputwithicon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" formControlName="location" placeholder="Enter Location" class="br">
+                </div>
+                <div class="inputwithicon">
+                        <i class="fas fa-layer-group"></i>
+                    <select formControlName="category"  name="" id="">
+                        <option value="" disabled selected>Select Category</option>
+                        <option  *ngFor="let category of categoryListWithCount" value="{{category[1]}}">{{category[1]}}</option>
+                    </select>        
+                </div>
+                <div class="searchBtn">
+                      DATE PICKER for date range and two input picker forprice range 
+                    <button type="submit"   class="srchBtn border_right"><i class="fab fa-searchengin"></i></button>
+                </div>   
+            </div>
+        </form>
+    </div>      
+</div>   -->

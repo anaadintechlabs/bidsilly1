@@ -1,0 +1,167 @@
+<div class="main">
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="box">
+              <h4 class="box_heading">All Category</h4>
+              <ul class="box_list" >
+                <li class="box_list_item" *ngFor="let category of categoryListWithCount">
+                  <a (click)="getAllProductOfCategory(category[0])" class="box_list_item_link">{{category[1]}} ({{category[2]}})</a></li>
+              </ul>
+            </div>
+            <div class="filter">
+                <h4 class="filter_heading">Select Range</h4>
+              <div class="filter_price">
+                <input class="filter_price_minPrice" type="text" onfocus="(this.type='number')" placeholder="Min Price"  [(ngModel)]="minPrice">
+                <input class="filter_price_maxPrice" type="text" onfocus="(this.type='number')" placeholder="Max Price" [(ngModel)]="maxPrice">
+                <button class="filter_price_button" (click)="applyPriceFilter()"><i class="fas fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="filter">
+                <h4 class="filter_heading">Select Range</h4>
+              <div class="filter_price">
+                <input class="filter_price_minPrice w-100 " type="text" placeholder="Min" onfocus="(this.type='date')" [(ngModel)]="minDate">
+                <input class="filter_price_maxPrice w-100 sapce_top" type="text" onfocus="(this.type='date')" placeholder="Max" [(ngModel)]="maxDate">
+                <button class="filter_price_button w-100 sapce_top" (click)="applyDateFilter()">Search</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-9">
+              <div class="header">
+                  <div class="header_content">
+                      <h2 class="header_content_heading">All Products</h2>
+                  </div>
+                  <div class="header_action">
+                        <button (click)="changeView('block')"  class="header_action_button" [ngClass]="{'active': id===1}" (click)="isClicked(1)">
+                                <i class="fas fa-th"></i>
+                        </button>
+                        <button (click)="changeView('list')" class="header_action_button" [ngClass]="{'active': id===2}" (click)="isClicked(2)">
+                                <i class="fas fa-th-list"></i>
+                        </button>            
+                  </div>
+              </div>
+              <div class="row" *ngIf="action=='block'">
+                  <div class="col-md-4 col-sm-6 col-xs-12" *ngFor="let product of productList">
+                    <div class="cardBlock">
+                      <div class="product">
+                         <a [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId,action:'view'}">
+                            <div class="product_image">
+                                <img class="product_image_top" [src]="imageUrl+product.mainImage">
+                             </div>
+                         </a>
+                             <div class="product_body">
+                                <div class="product_admin">
+                                    <img class="product_admin_image" src="../../assets/img/dummy.png">
+                                 </div>
+                                 <div class="product_description">
+                                    <h5 class="product_description_tital">{{ product.prodName }}</h5>
+                                    <p class="product_description_city"><i class="fas fa-map-marker-alt"></i> {{ product.city | uppercase }} </p>
+                                    <p class="product_description_date"><i class="fas fa-clock"></i> {{ product.createdDate | date }}</p>
+                                    <p class="product_description_catDetails"> <i class="fas fa-tag"></i> {{ product.category.catName }} > {{ product.subCategory.catName }}</p>
+                                 </div>
+                                 <div class="product_price">
+                                   <p class="product_price_1">Price: ₹ {{ product.price }}</p>
+                                 </div>
+                             </div>
+                          </div>
+                         <div class="product_action">
+                            <button (click)="reportedProduct(product.prodId)" title=" Report this ad" class="mybutton" data-toggle="modal" [attr.data-target]="reportform" type="button">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </button> 
+                            <button (click)="addToWishlist(product.prodId)" title=" Add to Wishlist" class="mybutton" data-toggle="modal" [attr.data-target]="login" type="button">
+                                <i class="far fa-heart"></i>
+                            </button>
+                          </div>
+                          
+                    </div>
+                  </div>
+                  <div class="row col-sm-12"  *ngIf="count>limit">
+                      <button   type="button" class="loadmore btn btnbox btn-danger" (click)="loadMoreProducts()">Load More</button>
+                    </div>
+              </div>
+            <div class="row" *ngIf="action=='list'">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngFor="let product of productList">
+                  <div class="featured-box">
+                    <figure>
+                      <!-- <div class="icon"> -->
+                          <button (click)="addToWishlist(product.prodId)" class="icon" title=" Add to Wishlist"  data-toggle="modal" [attr.data-target]="login" type="button">
+                              <i class="far fa-heart"></i>
+                          </button>
+                      <!-- </div> -->
+                      <a [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId,action:'view'}"><img class="img-fluid" [src]="imageUrl+product.mainImage"></a>
+                    </figure>
+                  <div class="feature-content">
+                    <div class="tg-product">
+                        {{ product.category.catName}} > {{ product.subCategory.catName }}
+                    </div>
+                  <h4><a href="ads-details.html">{{ product.prodName }}</a></h4>
+                      <span>Last Updated: {{ product.createdDate | date }}</span>
+                        <ul class="address">
+                          <li>
+                              <i class="fas fa-map-marker-alt"></i> {{ product.city }}
+                          </li>
+                          <li>
+                              <i class="fas fa-clock"></i> {{ product.createdDate | date }}
+                          </li>
+                          <li>
+                              <i class="fas fa-user"></i> User Name
+                          </li>
+                          <li>
+                              <i class="fas fa-tag"></i> {{ product.subCategory.catName }}
+                          </li>
+                        </ul>
+                        <div class="description">
+                          <p>{{product.prodDesc | slice:0:80 }}</p>
+                        </div>
+                        <div class="btn-list">
+                            <a class="btn-price" (click)="reportedProduct(product.prodId)" title=" Report this ad" data-toggle="modal" [attr.data-target]="reportform">
+                                <i class="fas fa-exclamation-circle"></i> Report Ad</a>
+                            <a class="btn btn-common" [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId,action:'view'}">
+                            ₹ {{product.price}}
+                            </a>
+                        </div>
+                      </div>
+                </div>
+                </div>
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<div id="reportform" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Report this ad</h5>
+        <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" [formGroup]="reportedAdForm" (ngSubmit)="reportFormOnSubmit()">
+
+          <div class="form-group">
+            <input type="radio" formControlName="description" value="Offensive Content"> Offensive Content<br>
+            <input type="radio" formControlName="description" value="Duplicate Ad"> Duplicate Ad<br>
+            <input type="radio" formControlName="description" value="Already Sold Product"> Already Sold Product<br>
+            <input type="radio" formControlName="description" value="Damaged Product"> Damaged Product
+           
+          </div>
+          <div class="form-group">
+            <label for="inputAddress2">Comment</label>
+            <input required type="text" autocomplete="off" formControlName="comment" class="form-control" id="productDesc" placeholder="">
+          </div>
+          <button type="submit" class="btn btn-primary">Report</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <form [formGroup]="searchForm" action="searchProduct()">
+    <input type="text" formControlName="searchString" placeholder="Enter Keyword" value="{{srchParam?.key}}" class="border_left br" hidden>
+    <input type="text" formControlName="location" placeholder="Enter Keyword" value="{{srchParam?.location}}" class="border_left br" hidden>
+    <input type="text" formControlName="category" placeholder="Enter Keyword" value="{{srchParam?.category}}" class="border_left br" hidden>
+    <button hidden type="submit"></button>
+</form> -->

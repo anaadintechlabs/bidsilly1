@@ -1,0 +1,193 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="header">
+          <div class="header_content">
+              <h2 class="header_content_heading">All Products</h2>
+          </div>
+          <div class="header_action">
+               <mat-select [value]="currentValue" placeholder="Choose Action" (selectionChange)="productView($event.value)">
+                  <mat-option  value="All Products" >All Products</mat-option>
+                  <mat-option  value="Pending Products" >Pending Products</mat-option>
+                  <mat-option  value="Reported Products" >Reported Products</mat-option>
+                  <mat-option  value="Approved Products" >Approved & Bidding Products</mat-option>
+                  <mat-option  value="My Products" >My Products</mat-option>
+              </mat-select>      
+          </div>
+      </div>
+      <div class="col-md-12">
+          <div class="card">
+              <!-- <div class="card-header card-header-danger">
+                  <h4 class="card-title ">Pending Products</h4>
+                  <p class="card-category"> Products are pending for Approvel.</p>
+              </div> -->
+              <div class="card-body" *ngIf=" allProductList && allProductList.length>0">
+                <div class="table-responsive">
+                    <table class="table" *ngIf="!reported">
+                      <thead class=" text-primary">
+                          <th id="img">Image</th>
+                          <th id="name">Product Name</th>
+                          <th id="desc"> Description</th>
+                          <th id="upload">Uploaded By</th>
+                          <th id="status"> Status</th>
+                          <th id="price">Price</th>
+                          <th id="action">Actions</th>
+                          <th id="act"></th>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let productList of allProductList | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }">
+                          <td> <img [src]="imageUrl+productList.mainImage" style="width:100px;"></td>
+                          <td> {{ productList.prodName | titlecase }} </td>
+                          <td> {{ productList.prodDesc | slice:0:180 }}</td>
+                          <td class="userDetail" data-toggle="modal" data-target="#mybidsDetail" (click)="showUser(productList.userId)">{{ productList.userId.name }}</td>
+                          <td>
+                            <span *ngIf="productList.status=='APPROVED'" class="status approve">{{ productList.status}}</span>
+                            <span *ngIf="productList.status=='DELETED'" class="status delete">{{ productList.status}}</span>
+                            <span *ngIf="productList.status=='NEW'" class="status watch">PENDING</span>
+                            <span *ngIf="productList.status!='NEW' &&  productList.status!='DELETED' && productList.status!='APPROVED'" class="status watch">{{ productList.status}}</span>
+                          </td>
+                          <td>₹ {{ productList.price }}  </td>
+                          <td>
+                            <button (click)="approveProductByid(productList.prodId)" class="common approve" *ngIf="productList.status=='NEW'"><i class="far fa-heart"></i></button>
+                            <button (click)="deleteReportedProductById(productList.prodId)" class="common delete" *ngIf="productList.status!='DELETED'"><i class="far fa-trash-alt"></i></button>
+                            <button class="common watch" *ngIf="currentValue!='My Products' && productList.status!='NEW'" [routerLink]="['/admin/productView']" [queryParams]="{ID:productList.prodId,action:'myads'}"><i class="far fa-eye"></i></button>
+                            <button class="common watch" *ngIf="currentValue!='My Products' && productList.status=='NEW'" [routerLink]="['/admin/productView']" [queryParams]="{ID:productList.prodId,action:'approve'}"><i class="far fa-eye"></i></button>
+                            <button class="common watch" *ngIf="currentValue=='My Products'" [routerLink]="['/admin/productView']" [queryParams]="{ID:productList.prodId,action:'myads'}"><i class="far fa-eye"></i></button>
+                            </td>
+                          <td class="text-primary">
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" value="" (change)="saveList($event, productList.prodId)">
+                                  <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                            </label>
+                          </div>
+                        </td>
+                        </tr>
+                        <pagination-controls  (pageChange)="pageChanged($event)"></pagination-controls>
+                      </tbody>
+                    </table>
+                    <table class="table" *ngIf="reported && allProductList && allProductList.length>0">
+                        <thead class=" text-primary">
+                            <th>Product Name</th>  
+                            <th>Reported BY</th>
+                            <th>Uploaded BY</th>
+                            <th>Reported Date</th>
+                            <th>Reported Count</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let reportedAd of allProductList | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }">
+                                <td> <a style="color: #02c2ef !important;" [routerLink]="['/admin/productView']" [queryParams]="{ID:reportedAd.productId.prodId,action:'report',reportId:reportedAd.reportedId}">{{ reportedAd.productId.prodName }}</a></td>   
+                                <td>{{ reportedAd.reportedBy }}</td>
+                                <td>{{ reportedAd.uploadedBy }}</td>
+                                <td>{{ reportedAd.reportDate|date }}</td>
+                                <td>{{ reportedAd.reportCount }}</td>
+                                <td>{{ reportedAd.description }}</td>
+                                <td>
+                                      <button (click)="deleteReportedProduct(reportedAd.reportedId)" title=" Delete Product" class="btn add subCatBtn" type="submit">
+                                              <!-- <i class="fa fa-plus-circle"></i> -->
+                                              Delete Product
+                                          </button>
+                                </td>
+
+                      
+                            </tr>
+                            <pagination-controls  (pageChange)="pageChangedReported($event)"></pagination-controls>
+                        </tbody>
+                    </table>
+                </div>
+              </div> 
+              <div class="card-body" *ngIf="allProductList && allProductList.length==0">
+                <h3 *ngIf="view=='All Products'">There is no product to display.</h3>
+                <h3 *ngIf="view=='Pending Products'">There is no pending product to display.</h3>
+                <h3 *ngIf="view=='My Products'">You haven't posted any ad since now.</h3>
+                <h3 *ngIf="view=='Reported Products'">There is no reported product to display.</h3>
+                <h3 *ngIf="view=='Approved Products'">There is no Approved product to display.</h3>
+              </div>  
+          </div>
+          <div *ngIf="allProductList && allProductList.length>0">
+            <mat-select  placeholder="Choose Action" class="actionSelect" (selectionChange)="productAction($event.value)">
+                <mat-option  value="Approve Products" *ngIf="view !='Approved Products'">Approve Products</mat-option>
+                <mat-option  value="Delete Products" >Delete Products</mat-option>
+                <!-- <mat-option  value="Hold Products" >Hold Products</mat-option> -->
+            </mat-select>
+            <button  (click)="performAction()"  class="btn approve applyBtn" type="submit">Apply</button>
+          </div>
+      </div>   
+  </div>
+</div>
+
+
+<!-- pop up for user detail -->
+
+<div id="mybidsDetail" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">User Information</h5>
+          <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+           
+          <div class="row">
+            <div class="col-sm-4">
+              <img [src]="imageUrl + selectedUser.imageUrl" alt="">
+            </div>
+            <div class="col-sm-8">
+              <p><span style="font-weight: 600;">Name : </span> {{selectedUser.name}}</p>
+              <p><span style="font-weight: 600;">Email : </span> {{selectedUser.email}}</p>
+              <p><span style="font-weight: 600;">Bio : </span> 
+                <span *ngIf="selectedUser.bio == null">No Bio Added</span> 
+                <span *ngIf="selectedUser.bio != null">{{selectedUser.bio}}</span>
+              </p>
+              <p><span style="font-weight: 600;">Phone No. : </span> 
+                  <span *ngIf="selectedUser.phoneNumber == null">No contact no. provided</span> 
+                  <span *ngIf="selectedUser.phoneNumber != null">{{selectedUser.phoneNumber}}</span>
+              </p>  
+              <p><span style="font-weight: 600;">Login Through : </span> 
+                <span *ngIf="selectedUser.provider == 'local'">By Application</span> 
+                <span *ngIf="selectedUser.provider != 'local'">{{selectedUser.provider}}</span>
+              </p>
+              <p><span style="font-weight: 600;">Join Date : </span> {{selectedUser.joinDate | date}}</p>  
+              <p><span style="font-weight: 600;">Activation : </span> 
+                <span *ngIf="selectedUser.deactivated">Deactivated</span> 
+                <span *ngIf="!selectedUser.deactivated">Activated</span>
+              </p>
+              <p><span style="font-weight: 600;">Account Status : </span> 
+                <span *ngIf="selectedUser.blocked">Blocked</span> 
+                <span *ngIf="!selectedUser.blocked">Active</span>
+              </p>
+            </div>
+          </div>
+            <!-- <form [formGroup]="userForm" >
+
+                <div class="col-md-12">
+                    <input readonly  matInput autocomplete="off" formControlName="email" class="common"  placeholder="Category Name" type="text">    
+              </div>
+              <div class="col-md-12">
+                  <input readonly matInput autocomplete="off"  class="common" formControlName="name" placeholder="Description" type="text">
+              </div>
+
+              <div class="col-md-12">
+                    <input readonly matInput autocomplete="off" formControlName="joinDate" class="common"  placeholder="Category Name" type="text">    
+              </div>
+              <div class="col-md-12">
+                  <input readonly matInput autocomplete="off"  class="common" formControlName="phoneNumber" placeholder="Description" type="text">
+              </div>
+
+               
+              <!-- <div class="left">
+                <input type="checkbox" name="Remember Me" id=""> Remember Me
+              </div> //
+              
+              </form> -->
+
+
+          </div>
+      </div>
+    </div>
+  </div>

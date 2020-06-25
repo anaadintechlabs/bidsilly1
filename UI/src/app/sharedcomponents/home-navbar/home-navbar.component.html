@@ -1,0 +1,296 @@
+<header id="header" [ngClass]="{'sticky': isSticky}">
+    <!-- <div class="container"> -->
+        <nav class="navbarTransparent">
+            <div class="image">
+              <a routerLink="/home">
+              <img class="image_logo" src="../../../assets/img/Bidsilly Logo.png" alt=""></a>
+            </div>
+            <div class="menu mob">
+              <ul class="menu_list">
+                <li class="menu_list_item"><a class="menu_list_item_link" routerLink="/home">Home</a></li>
+                <li class="menu_list_item mydropdown1"><a class="menu_list_item_link " (click)="displayCategory()">Categories</a>
+                  <!-- <div class="float" *ngIf="displayCat"> -->
+                    <div class="float" >
+                     <!-- <button (click)="displayCategory()" class="closeBtn"><i class="fa fa-times"></i></button> -->
+                     <ul class="float_list" *ngFor="let category of myMap | keyvalue">
+                        <li>
+                           <p><a class="float_list_item_link"  (click)="performSearch2(category.key)" routerLink="/home/allProducts">{{(category.key|splitkey)[1]}}</a></p>
+                           <ul class="subCatList">
+                                <li class="subCatList_list" *ngFor="let subCat of category.value | keyvalue">
+                                  <a class="subCatList_list_item" (click)="performSearch(subCat.key)" [routerLink]="[ '/home/allProducts']" [queryParams]="{sid:subCat.key}">{{subCat.value}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                      </ul>
+               </div>
+                </li>
+                <li class="menu_list_item"><a class="menu_list_item_link" routerLink="/home/allProducts">All products</a></li>
+                <!-- <li class="menu_list_item"><a class="menu_list_item_link" href="#">Contact</a></li> -->
+                
+              </ul>
+            </div>
+            <div class="status mob">
+              <ul class="status_list">
+                <div style="display: inline;" *ngIf="loginStatus; else elseBlock">                
+                <li class="status_list_item login mydropdown">
+                  <a  class="status_list_item_link" >
+                    <i class="far fa-user"></i>My Profile </a>
+   
+                    <div class="mydropdown-menu">
+                        <div class="pointer">
+                            <span class='tip'></span>
+                        </div>
+                        <ul class="mydropdown-menu-list">
+                            <!-- <li class="mydropdown-menu-list-item"><a class="mydropdown-menu-list-item-link" routerLink="/home/myads"><i class="fas fa-ad"></i> My Ads</a></li>
+
+                            <li class="mydropdown-menu-list-item"><a class="mydropdown-menu-list-item-link" routerLink="/home/showallbids"><i class="fas fa-heart"></i> Show All Bids</a></li>
+                            <li class="mydropdown-menu-list-item"><a class="mydropdown-menu-list-item-link" routerLink="/home/wishlist"><i class="fas fa-heart"></i> WishList</a></li>
+                            <li class="mydropdown-menu-list-item border2"><a class="mydropdown-menu-list-item-link" routerLink="/home/myBids"><i class="fab fa-accusoft"></i> My Bids</a></li>
+                            <li class="mydropdown-menu-list-item"><a class="mydropdown-menu-list-item-link" routerLink="/home/editProfile"><i class="fas fa-address-card"></i> Edit Profile</a></li>
+                             <li class="mydropdown-menu-list-item border2"><a class="mydropdown-menu-list-item-link" routerLink="/home/setting"><i class="fas fa-cogs"></i> Settings</a></li>
+                            <li class="mydropdown-menu-list-item"><a class="mydropdown-menu-list-item-link" (click)="logOutUser()"><i class="fas fa-sign-out-alt"></i> Logout</a></li> -->
+
+
+                            <li class="mydropdown-menu-list-item"><a class="mydropdown-menu-list-item-link" routerLink="/home/userDashboard"><i class="fas fa-home"></i> Account Home</a></li>
+                            <li class="mydropdown-menu-list-item"><a class="mydropdown-menu-list-item-link" routerLink="/home/userDashboard" (click)="redirect('My Ads')"><i class="fas fa-ad"></i> My Ads</a></li>
+                            <li class="mydropdown-menu-list-item"><a class="mydropdown-menu-list-item-link" routerLink="/home/userDashboard" (click)="redirect('WishList')"><i class="fas fa-heart"></i> WishList</a></li>
+                            <li class="mydropdown-menu-list-item border2"><a class="mydropdown-menu-list-item-link" routerLink="/home/userDashboard" (click)="redirect('My Bids')"><i class="fab fa-accusoft"></i> My Bids</a></li>
+                            <li class="mydropdown-menu-list-item"><a class="mydropdown-menu-list-item-link" routerLink="/home/userDashboard" (click)="redirect('Profile Setting')"><i class="fas fa-address-card"></i> Edit Profile</a></li>
+                             <li class="mydropdown-menu-list-item border2"><a class="mydropdown-menu-list-item-link" routerLink="/home/userDashboard" (click)="redirect('setting')"><i class="fas fa-cogs"></i> Settings</a></li>
+                            <li class="mydropdown-menu-list-item"><a class="mydropdown-menu-list-item-link" (click)="logOutUser()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                  </li>
+                </div>
+                <ng-template #elseBlock><li class="status_list_item login"><a  class="status_list_item_link" (click)="login()" data-toggle="modal" [attr.data-target]="loginForm">
+                  <i class="far fa-user"></i> My Account</a></li></ng-template>
+                <li class="status_list_item post"><a class="status_list_item_link" (click)="showSell()" data-toggle="modal" [attr.data-target]="post"><i class="fab fa-telegram-plane"></i> Post An Ad</a></li>
+              </ul>
+            </div>
+            <div class="mobile">
+                
+              <button class="mobile_menu_button" (click)="displayMenu()"><i class="fas fa-bars"></i></button>
+              <div id="mobile_menu" class="mobile_menu" [ngClass]="{'showMenu': showMenu}">
+                <button class="mobile_menu_cnclBtn" (click)="displayMenu()" ><i class="fas fa-times"></i></button>
+                <ul class="mobile_menu_list">
+                  <li class="mobile_menu_list_item"><a (click)="displayMenu()" class="mobile_menu_list_item_link" routerLink="/home">Home</a></li>
+                  <li class="mobile_menu_list_item"><a (click)="displayMenu()" class="mobile_menu_list_item_link" routerLink="/home/allProducts">All Products</a></li>
+                  <li class="mobile_menu_list_item"><a class="mobile_menu_list_item_link" (click)="showSell()" data-toggle="modal" [attr.data-target]="post"><i class="fab fa-telegram-plane"></i> Post An Ad</a></li>
+                  <li class="mobile_menu_list_item" *ngIf="loginStatus"><a class="mobile_menu_list_item_link" (click)="displayMenu('My Ads')" routerLink="/home/userDashboard"><i class="fas fa-ad"></i> My Ads</a></li>
+                  <li class="mobile_menu_list_item" *ngIf="loginStatus"><a class="mobile_menu_list_item_link" (click)="displayMenu('WishList')" routerLink="/home/userDashboard"><i class="fas fa-heart"></i> WishList</a></li>
+                  <li class="mobile_menu_list_item" *ngIf="loginStatus"><a class="mobile_menu_list_item_link" (click)="displayMenu('My Bids')" routerLink="/home/userDashboard"><i class="fab fa-accusoft"></i> My Bids</a></li>
+                  <li class="mobile_menu_list_item" *ngIf="loginStatus"><a class="mobile_menu_list_item_link" (click)="displayMenu('Profile Setting')" routerLink="/home/userDashboard"><i class="fas fa-address-card"></i> Edit Profile</a></li>
+                  <li class="mobile_menu_list_item" *ngIf="loginStatus"><a class="mobile_menu_list_item_link" (click)="displayMenu('setting')" routerLink="/home/userDashboard"><i class="fas fa-cogs"></i> Settings</a></li>
+                  <li class="mobile_menu_list_item" *ngIf="loginStatus"><a class="mobile_menu_list_item_link" (click)="logOutUser()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                  <li class="mobile_menu_list_item" *ngIf="!loginStatus"><a class="mobile_menu_list_item_link" data-toggle="modal" [attr.data-target]="loginForm"><i class="fas fa-user"></i> Login/Sgnup</a></li>
+                </ul>
+              </div>
+            </div>
+        </nav>
+    <!-- </div>   -->
+</header>
+
+
+<!-- <div class="float">
+<ul class="float_list" *ngFor="let subcat of subCategoryList | keyvalue">
+  <li class="float_list_item" *ngIf="checkSubcat(subcat.key)"><p  *ngFor="let s of subCat2 | keyvalue">{{s.value}}</p></li>
+</ul>
+</div> -->
+
+    <!-- <div *ngFor="let subcat of subCategoryList">
+      <span>{{ subCat }}</span>
+    </div> -->
+    <!-- <ul *ngFor="let subcat of subCategoryList | keyvalue">
+      <li *ngIf="checkSubcat(subcat.key)">
+          {{subcat.value}}
+      </li>
+            <li *ngIf= 'checkSubcat(subcat.key)'>
+            {{subcat.key}}  {{subcat.value}}
+            <p *ngFor="let s of subCat2 | keyvalue">
+                {{s.value}}
+            </p>
+        </li>
+    </ul> -->
+<!-- 
+
+<div id="flipkart-navbar">
+  <div class="container">
+      <div class="row row1">
+          <ul class="largenav pull-right">
+              <li class="upper-links"><a class="links" (click)="callHome()">Home</a></li>
+              <li class="upper-links"><a class="links" (click)="callAllProduct()" routerLink="/home/allProducts" >All Product</a></li>
+              
+              <li class="upper-links"><a title="login" class="links" data-toggle="modal" data-target="#loginform" >Login/Register</a>
+              </li>
+              <!-- <li class="upper-links"><a class="links" >Link 3</a></li>
+              <li class="upper-links"><a class="links" >Link 4</a></li>
+              <li class="upper-links"><a class="links" >Link 5</a></li>
+              <li class="upper-links"><a class="links" >Link 6</a></li> -->
+              <!-- <li class="upper-links">
+                  <a class="links" >
+                      <svg class="" width="16px" height="12px" style="overflow: visible;">
+                          <path d="M8.037 17.546c1.487 0 2.417-.93 2.417-2.417H5.62c0 1.486.93 2.415 2.417 2.415m5.315-6.463v-2.97h-.005c-.044-3.266-1.67-5.46-4.337-5.98v-.81C9.01.622 8.436.05 7.735.05 7.033.05 6.46.624 6.46 1.325v.808c-2.667.52-4.294 2.716-4.338 5.98h-.005v2.972l-1.843 1.42v1.376h14.92v-1.375l-1.842-1.42z" fill="#fff"></path>
+                      </svg>
+                  </a>
+              </li>
+
+              <li class="upper-links drpdwn"><a class="links" >Dropdown</a>
+                  <ul class="drpdwn_menu">
+                      <li class="profile-li"><a class="profile-links" >Link</a></li>
+                      <li class="profile-li"><a class="profile-links" >Link</a></li>
+                      <li class="profile-li"><a class="profile-links" >Link</a></li>
+                      <li class="profile-li"><a class="profile-links" >Link</a></li>
+                      <li class="profile-li"><a class="profile-links" >Link</a></li>
+                      <li class="profile-li"><a class="profile-links" >Link</a></li>
+                      <li class="profile-li"><a class="profile-links" >Link</a></li>
+                  </ul>
+              </li> 
+          </ul>
+      </div>
+      <div class="row row2">
+          <div class="col-sm-2">
+              <h2 style="margin:0px;"><span class="smallnav menu" onclick="openNav()">☰ Brand</span></h2>
+              <h3 style="margin:0px;margin-right:10px;"><span class="largenav">ACLASSDEAL</span></h3>
+          </div>
+          <div class="flipkart-navbar-search smallsearch col-sm-6 col-xs-10">
+              <div class="row">
+                  <input class="flipkart-navbar-input col-sm-11" type="" placeholder="Search for Products, Brands and more" name="">
+                  <button class="flipkart-navbar-button col-sm-1">
+                      <svg width="15px" height="15px">
+                          <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467 "></path>
+                      </svg>
+                  </button>
+              </div>
+          </div>
+          <div class="cart largenav col-sm-2">
+              <a class="cart-button" (click)="showWishList()">
+                  <svg class="cart-svg " width="16 " height="16 " viewBox="0 0 16 16 ">
+                      <path d="M15.32 2.405H4.887C3 2.405 2.46.805 2.46.805L2.257.21C2.208.085 2.083 0 1.946 0H.336C.1 0-.064.24.024.46l.644 1.945L3.11 9.767c.047.137.175.23.32.23h8.418l-.493 1.958H3.768l.002.003c-.017 0-.033-.003-.05-.003-1.06 0-1.92.86-1.92 1.92s.86 1.92 1.92 1.92c.99 0 1.805-.75 1.91-1.712l5.55.076c.12.922.91 1.636 1.867 1.636 1.04 0 1.885-.844 1.885-1.885 0-.866-.584-1.593-1.38-1.814l2.423-8.832c.12-.433-.206-.86-.655-.86 " fill="#fff "></path>
+                  </svg> Wishlist
+                  <span class="item-number "></span>
+              </a>
+          </div>
+
+          <div class="cart largenav col-sm-2">
+              <a class="cart-button" (click)="showSell()" >
+                 Sell
+                  <span class="item-number "></span>
+              </a>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div id="mySidenav" class="sidenav">
+  <div class="container" style="background-color: #2874f0; padding-top: 10px;">
+      <span class="sidenav-heading">Home</span>
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+  </div>
+  <a >Link</a>
+  <a >Link</a>
+  <a >Link</a>
+  <a >Link</a>
+</div>
+    
+
+
+
+
+    <!-- <div class="sidebar" [ngClass]="status ? 'activesidebar':'nonactivesidebar'">
+        <button (click)="changeclass()" class="back"> Back </button>
+      <div class="sidebar-header" >
+        <h4>this is sidebar</h4>
+      </div>
+      <div class="catagoryLink">
+        <ul>
+          <li>Catagory 1</li>
+          <li>Catagory 2</li>
+          <li>Catagory 3</li>
+          <li>Catagory 4</li>
+          <li>Catagory 5</li>
+          <li>Catagory 6</li>
+        </ul>
+      </div>
+    </div> -->
+
+    <!-- <button (click)="changeclass()"> <i class="material-icons">
+                list
+                </i></button> -->
+  <!-- <nav class="navbar">
+        <div class="container">
+          <div class="menuLeft">
+            
+            <div class="logo navbar-brand">
+                <img src="../../../assets/img/logo-small.png" alt="logo image">
+            </div>
+            <ul class="navbar-nav nav-inline mr-auto mt-2 mt-lg-0">
+              <li class="nav-item ">
+                <a class="nav-link" routerLink="/home">Home</a>
+              </li>
+               <li class="nav-item">
+                <a class="nav-link" routerLink="/home/allProducts">All Products</a>
+              </li>
+              <!-- <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+              </li>
+            </ul> 
+          </div>
+            <div class="menuRight">
+            <form class="form-inline ml-auto">
+                <div class="form-group has-white">
+                  <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn bg-btn btn-neutral btn-icon btn-round">
+                    <i class="material-icons">search</i>
+                </button>
+            </form>
+            <ul class="navbar-nav nav-inline  mt-2 mt-lg-0">
+                <li class="nav-item ">
+                  <a class="nav-link" routerLink="/home/wishlist"><i class="material-icons">
+                      favorite
+                      </i></a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" routerLink="/home">  <i class="material-icons">
+                        shopping_cart
+                      </i></a>
+                  </li>
+                  <li class="nav-item ">
+                      <a class="nav-link" routerLink="/home"><i class="material-icons">
+                          lock
+                        </i></a>
+                    </li>
+
+                   <li class="nav-item ">
+                      <a class="nav-link" routerLink="/home/sell"><i class="fa fa-send"></i></a>
+                    </li>   
+            </ul>
+            </div>
+        </div>
+      </nav> -->
+ 
+
+
+
+
+
+<!-- <nav class="navbar navbar-expand-lg bg-primary">
+    <div class="container">
+      <a class="navbar-brand" routerLink="/home">Navbar</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-bar navbar-kebab"></span>
+      <span class="navbar-toggler-bar navbar-kebab"></span>
+      <span class="navbar-toggler-bar navbar-kebab"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item ">
+            <a class="nav-link" routerLink="/home" >Home</a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" routerLink="/home/wishlist" >Wishlist</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav> -->

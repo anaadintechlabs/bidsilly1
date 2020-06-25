@@ -1,0 +1,182 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="card card-plain">
+              <div class="card-header card-header-danger">
+                  <h4 class="card-title mt-0">Category</h4>
+                  <p class="card-category"> Added Category will be shown to user While uploading ad</p>
+                <button type="button" (click)="addCategory()" class="btn btn-warning text-right">Add Category</button>                                     
+              </div>
+          </div>
+        <div class="col-sm-5">
+          <div class="category_form" *ngIf="action=='addCat'">
+            <h2 class="form_heading">Category Form</h2>
+              <form role="form"  [formGroup]="category" (ngSubmit)="categoryFormOnSubmit(action)">                
+                      <div class="col-md-12">
+                            <input matInput autocomplete="off" formControlName="catName" class="common"  placeholder="Category Name" type="text">    
+                          <mat-error *ngIf="submitted && category.controls.catName.invalid">This field is required</mat-error>                          
+                      </div>
+                      <div class="col-md-12">
+                          <input matInput autocomplete="off"  class="common" formControlName="catDesc" placeholder="Description" type="text">
+                        <mat-error *ngIf="submitted && category.controls.catDesc.invalid">This field is required</mat-error>                          
+                      </div>
+
+                       <div class="col-md-12">                  
+                            <mat-checkbox type='checkbox' (change)='biddingAllowedfun($event.checked)' formControlName="allowBidding" class="chkbox">Allow Bidding for this Category ?</mat-checkbox>      
+                      </div>
+                    <div  class="col-md-12" *ngIf="biddingAllowed">
+                            <input matInput  autocomplete="off" formControlName="minimumAmount" class="common" placeholder="Enter minimum bidding amount" type="number">
+                     </div>
+
+
+                      <div class="col-md-12">
+                            <div class="upload-image">
+                              <label class="control-label upload"   for="filebutton">
+                                  <span>Category Icon</span>
+                                  <span >Drop file hare to upload</span>
+                                   <input id="filebutton" accept=".ico" name="filebutton" #inputFile (change)="onSelectFile($event)"  type="file" >
+                                   <span >(the file size must be less than 2MB)</span>
+                              </label>
+                          </div>
+                        </div>
+                    <div class="col-md-12">
+                  <button  mat-raised-button type="submit" class="btn btnbox btn-danger">Create Category</button>
+                  <div class="clearfix"></div></div>
+              </form>
+          </div>
+          <div class="subCategory_form" *ngIf="action=='addSub'">
+              <form role="form" [formGroup]="subCategory" (ngSubmit)="subCategoryFormOnSubmit(action)"> 
+                  <h2 class="form_heading">SubCategory Form</h2>
+                  <fieldset formGroupName="parentCategory">
+                      <div class="col-md-12">
+                            <input autocomplete="off" class="common" formControlName="catCode" matInput readonly placeholder="Parent Category code">
+                      </div> 
+                      </fieldset>               
+                      <div class="col-md-12">
+                            <input matInput formControlName="catName" autocomplete="off" class="common"  placeholder="Subcategory Name" type="text">    
+                          <mat-error *ngIf="submitted && category.controls.catName.invalid">This field is required</mat-error>                          
+                      </div>
+                      <div class="col-md-12">
+                          <input matInput autocomplete="off" formControlName="catDesc" class="common"  placeholder="Description" type="text">
+                        <mat-error *ngIf="submitted && category.controls.catDesc.invalid">This field is required</mat-error>                          
+                      </div>
+                      <div class="col-md-12">                  
+                          <mat-checkbox type='checkbox' class="chkbox" formControlName="modelAvailable"  (change)='modelChange($event.checked)' >Leaf Category Available?</mat-checkbox>      
+                      </div>
+                      <div  *ngIf="modelAvailable">
+                        <div class="col-md-12">    
+                            <input autocomplete="off"  class="fieldModel common" formControlName="models"  matInput placeholder="Model" type="text">
+                            <button type="button" (click)="addNewModel()" class="btn modelBtn btn-warning" title="Add More Model"><i class="fas fa-plus"></i></button>    
+                           <mat-error *ngIf="invalidModel">This field is invalid</mat-error>
+                          </div>
+                          <div class="col-md-12"></div>
+                            <div class="row">
+                                <div class="container">
+                                    <div class="col-md-12" style="margin: 15px 20px;">
+                                        <div class="stylModel" *ngFor="let model of modelList">
+                                            {{model}} 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="col-md-12">
+                  <button  mat-raised-button type="submit" class="btn btnbox btn-danger">Save Subcategory</button>
+                  <div class="clearfix"></div></div>
+              </form>
+          </div>
+          <div class="attribute_form" *ngIf="action=='addAttr'">
+              <form role="form"  [formGroup]="catAttribute" (ngSubmit)="attributeFormOnSubmit(action)">
+                  <h2 class="form_heading">Attribute Form</h2>
+                  <fieldset formGroupName="parentCategory">
+                      <div class="col-md-12">
+                            <input autocomplete="off" class="common" formControlName="catCode" matInput readonly placeholder="Parent Category code">
+                      </div> 
+                      </fieldset>           
+                <div class="col-md-12">
+                            <input autocomplete="off" matInput class="common" formControlName="attributeName" placeholder="Attribute Name" type="text">
+                            <mat-error *ngIf="submitted && catAttribute.controls.attributeName.invalid">This field is required</mat-error>
+                      </div>
+                      <div class="col-md-12">
+                        <mat-select required class="example-full-width common" formControlName="attributeType" (selectionChange)="getSelectedAttribue($event.value)" placeholder="Select Attribute Type" >
+                            <mat-option  value="input">Input Field</mat-option>
+                            <mat-option  value="select">Drop Down box</mat-option>
+                            <mat-option  value="checkbox">Check Box</mat-option>
+                            <mat-option  value="radio">Radio Button</mat-option>
+                        </mat-select>
+                      </div>  
+                      <div *ngIf="selected=='input'" class="col-md-12">
+                          <mat-select required class="example-full-width common" formControlName="typeForInput" placeholder="Select Input Type" >
+                              <mat-option  value="text">Text</mat-option>
+                              <mat-option  value="number">Number</mat-option>
+                              <mat-option  value="date">Date</mat-option>
+                          </mat-select>
+                      </div>   
+                      <div  *ngIf="selected!='input'" class="col-md-12">    
+                            <input   matInput class="fieldModel common" formControlName="attributeValue" placeholder="Attribute Key">
+                            <button type="button" (click)="addNewKey()" class="btn modelBtn btn-warning"><i class="fas fa-plus"></i></button>
+                            <mat-error *ngIf="invalidKey">This field is invalid</mat-error>
+                        <div class="stylAttrKey" *ngFor="let key of keyList">
+                        {{key}}
+                    </div>
+                      </div>
+                    <div class="col-md-12">
+                  <button mat-raised-button type="submit" class="btn btn-danger btnbox">Add Attribute</button>
+                  <div class="clearfix"></div></div>
+              </form>
+          </div>
+          <div  *ngIf="attributeList && attributeList.length>0 && action=='showAttr'" class="table-responsive">
+            <div class="card card-plain">
+              <div class="card-header card-header-danger">
+                  <h4 class="card-title mt-0">Attribute List</h4>
+                  <p class="card-category"> All attribute of the relating Sub Category</p>
+              </div>
+              <table class="table table-hover">
+                <thead class="attrTblHead">
+                    <th>Attribute Name</th>
+                    <th> Attribute   Type</th>
+                    <th>Attribute   Value</th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let attribute of attributeList">
+                    <td>{{attribute.attributeName}}</td>
+                    <td>{{attribute.attributeType}}</td>
+                    <td>{{attribute.attributeValue}}</td>
+                  </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+
+        <div class="col-sm-7">
+          <div class="category_view row">
+            <div class="col-sm-6">
+                    <ul class="category_view_list">              
+                      <li class="category_view_list_item" *ngFor="let category of categoryList">
+                         <img class="category_view_list_item_image" [src]="url+category.catIcon">
+                          <span>{{category.catName}}</span>
+                          <button class="category_view_list_item_addSubcatBtn" popover="Add Subcategory" (click)="addSubcategory(category.catCode)" title="Add SubCategory"><i class="fas fa-link"></i></button>
+                          <button class="category_view_list_item_delCatBtn" (click)="deleteCategory(category.catCode,category.inUse)" title="Delete Category"><i class="fa fa-trash"></i></button>
+                          <button class="category_view_list_item_downBtn" (click)="getAllSubcategory(category.catCode)"><i class="fas fa-chevron-right"></i></button>                                    
+                        </li>
+                    </ul>
+            </div>
+            <div class="col-sm-6">
+                    <ul class="category_view_list">              
+                        <li class="category_view_list_item" *ngFor="let subCat of subCategoryList">
+                            {{subCat.catName}}
+                            <span>{{category.catName}}</span>
+                            <button class="category_view_list_item_addSubcatBtn" (click)="addAttribute(subCat.catCode)"><i class="fas fa-link"></i></button>
+                             <button class="category_view_list_item_delCatBtn" (click)="deleteSubCategory(subCat.catCode,subCat.inUse)" title="Delete Category"><i class="fa fa-trash"></i></button>
+                             <button class="category_view_list_item_downBtn" (click)="getAllAttr(subCat.catCode)"><i class="fas fa-chevron-right"></i></button>
+                            <!-- <button class="category_view_list_item_downBtn" (click)="getAllSubcategory(category.catCode)"><i class="fas fa-chevron-down"></i></button>  -->
+                        </li>
+                    </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+

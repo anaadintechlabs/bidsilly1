@@ -1,0 +1,113 @@
+.chkbox {
+    margin-right: 15px !important;
+    margin-top: 10px;
+}
+.note{
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.category{
+    width: 100%;
+    position: relative;
+    &_list{
+        list-style: none;
+        width: 48%;
+        padding: 0;
+        display: inline-block;
+        margin-right: 3px;
+        &_item{
+            padding: 12px 20px;
+            border: 2px solid;
+            border-top: 0;
+            cursor: pointer;
+            &:nth-child(1){
+                border-top:2px solid;
+            }
+            &_img{
+                width: 25px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+            i{
+                float: right;
+                font-size: 1rem;
+                padding: 6px;
+            }
+        }
+    }
+    .subcategory_list{
+        list-style: none;
+        width: 48%;
+        float: right;
+        display: inline-block;
+        // position: absolute;
+        // right: 2%;
+        padding: 0;  
+        // top: 0; 
+        &_item{
+            padding: 12px 20px;
+            border: 2px solid;
+            border-top: 0;
+            cursor: pointer;
+            &:nth-child(1){
+                border-top:2px solid;
+            }
+            i{
+                float: right;
+                font-size: 1rem;
+                padding: 6px;
+            }
+        }
+    }
+}
+.upload{
+    border: 2px dashed #999;
+    padding:20px;
+    span{
+        display: block;
+        text-align: center;
+        padding: 3px 0;
+    }
+    input{
+        width: 160px;
+        margin: 0 auto;
+        display: block;
+    }
+}
+
+.myForm{
+    padding: 30px;
+    border: 1px solid #e3e3e3;
+    margin: 50px 0;
+    .common {
+        padding: 15px 20px;
+        border: 1px solid #8781c969;
+        height: 60px !important;
+        margin: 10px 0;
+        width: 100%;
+    }
+    .button{
+        text-align: right;
+        button{
+            BORDER: none;
+            background-color: #99d420;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+    }
+    .backBtn{
+        padding: 20px;
+    border: 1px solid #b3b3b3;
+        button{
+            border: none;
+            font-size: 14px;
+            background: transparent;
+            /* margin-bottom: 15px; */
+            font-weight: 600;
+        }
+    }
+}

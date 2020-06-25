@@ -1,0 +1,290 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-8">
+                <h3 style="text-align: center; color:#666; font-weight: 600;">Post an Ad</h3>
+                 <form role="form" [formGroup]="productForm" (ngSubmit)="productFormOnSubmit(action)" class="myForm">
+                    <div class="part1" *ngIf="formPart===1">
+                        <h4>Select Category</h4>
+                        <div class="row">
+                            <div class="category clearfix">
+                                <ul class="category_list">
+                                    <li class="category_list_item" *ngFor="let category of categoryList" (click)="showsubCat(category)">
+                                            <img class="category_list_item_img" [src]="imageUrl+category.catIcon">
+                                        {{category.catName}}<i class="fas fa-chevron-right"></i></li>
+                                </ul>
+                                <ul class="subcategory_list" *ngIf="showSubcategory">
+                                    <li class="subcategory_list_item" *ngFor="let subcategory of subCategoryList" (click)="showform(subcategory)">
+                                        {{subcategory.catName}}<i class="fas fa-chevron-right"></i></li>
+                                </ul>
+                            </div>
+                        </div>
+<!-- 
+                            <div class="row">
+                                    <div class="col-md-6">
+                                        <mat-select (selectionChange)="getAllSubCategoryAndAttributeOfCategoryCode($event.value)" placeholder="Select Category"  class="common" required >
+                                          <mat-option [value]="category" *ngFor="let category of categoryList">{{category.catName}}</mat-option>
+                                        </mat-select>
+                                    </div>
+                                    <div class="col-md-6">
+                                            <mat-select placeholder="Select SubCategory" (selectionChange)="checkForModelorLeafCategory($event.value)"  class="common" required >
+                                                <mat-option [value]="subcategory" *ngFor="let subcategory of subCategoryList">{{subcategory.catName}}</mat-option>
+                                            </mat-select>
+                                        </div>
+                                </div>
+
+                        <div class="button">
+                            <button type="button" (click)="changeFormProcess(2)">Next</button>
+                        </div> -->
+                    </div>
+                       <!-- Dynamic attribute will be here -->
+                    <div class="part-2" *ngIf="formPart==2">
+                        <div class="backBtn">
+                            <h4>Selected Category</h4>
+                            <span style="font-size: 14px; text-transform: capitalize; margin-right: 10px;">{{selectedCategory}}> {{selectedSubCategory}}</span>
+                            <button (click)="changeBackFormProcess(1)" type="button">Change Category</button>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12">
+                                    <input matInput formControlName="prodName" required autocomplete="off"  class="common" placeholder="Ad Title" type="text">
+                                   <mat-error *ngIf="submitted && productForm.controls.prodName.invalid">This field is required</mat-error>
+                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <textarea matInput formControlName="prodDesc" class="common" placeholder="Ad Description"></textarea>
+                                <mat-error *ngIf="submitted && productForm.controls.prodDesc.invalid">This field is required</mat-error>                                      
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="models.length>0">
+                            <div class="col-md-12">
+                                <mat-select *ngIf="selectedCategory !='Properties'" placeholder="Select Model" class="common"  formControlName="model"  >
+                                    <mat-option  [value]="model"  *ngFor="let model of models">{{model}}</mat-option>
+                                </mat-select>
+                                <mat-select *ngIf="selectedCategory == 'Properties'" placeholder="Property Type" class="common"  formControlName="model"  >
+                                        <mat-option  [value]="model"  *ngFor="let model of models">{{model}}</mat-option>
+                                    </mat-select>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div *ngFor="let attribute of attributeList" class="col-md-12">
+                                <div *ngIf=" attribute && attribute.attributeType=='input'">
+                                        <input matInput  [formControlName]="attribute.attributeId" class="common" placeholder="{{attribute.attributeName}}" type={{attribute.typeForInput}}>
+                                </div>
+                                 <!--now dynamic input fields  -->
+                                 
+                                <div *ngIf=" attribute && attribute.attributeType=='select'">
+                                    <mat-select placeholder="{{attribute.attributeName}}" class="common" matInput required [formControlName]="attribute.attributeId"  >
+                                        <mat-option [value]="elem" *ngFor="let elem of (attribute.attributeValue | splitkey)" >{{elem}}</mat-option>
+                                    </mat-select>
+                                </div>
+
+
+                                <div *ngIf=" attribute && attribute.attributeType=='checkbox'">
+                                     <mat-label style="display: block; margin-bottom: 10px;">{{attribute.attributeName}}</mat-label> 
+                                <!-- <mat-form-field class="example-full-width"> -->
+                                     <mat-checkbox class="chkbox"  matInput [value]="elem" [formControlName]="attribute.attributeId" *ngFor="let elem of (attribute.attributeValue | splitkey)"  type='checkbox' >{{elem}}</mat-checkbox>      
+                                  <!-- </mat-form-field> -->
+                                  </div>
+                                <div *ngIf=" attribute && attribute.attributeType=='radio'">
+                                     <mat-label style="display: block">{{attribute.attributeName}}</mat-label> 
+                               
+                                     <mat-radio-group  [formControlName]="attribute.attributeId">
+                                        <mat-radio-button matInput  [value]="elem" class="chkbox" *ngFor="let elem of (attribute.attributeValue | splitkey)">{{elem}}</mat-radio-button>
+                                     </mat-radio-group>
+                               
+                                  </div>  
+                            </div> 
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                    <input matInput class="common" formControlName="phoneNumber" autocomplete="off" placeholder="Enter Phone Number" type="text">
+                                    <mat-error *ngIf="submitted && productForm.controls.phoneNumber.invalid">Please Enter Valid Phone Number</mat-error>
+                            </div>
+                            <div class="col-md-6">
+                                    <input type='checkbox'  formControlName="allowNumber" /> Make my number visible ?     
+                            </div>
+                        </div>
+                        <div class="row" style="margin: 0;" *ngIf="allowBidding && priceSuitableForBidding">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" formControlName="bid" type="checkbox" (change)="setBidding($event)" >
+                                                Would you like other users to bid for this product?
+                                                <span class="form-check-sign">
+                                                    <span class="check"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="row" *ngIf="bidEnable">
+                            <!-- <div class="col-md-6">
+                                <input matInput class="common" formControlName="bidamount" type="number" placeholder="Bidding Price">
+                            </div> -->
+                            <!-- <div class="col-md-6">
+                                <input matInput class="common" formControlName="bidTime" type="date" placeholder="Last date for Bidiing">
+                            </div> -->
+                        </div>
+                        <div class="row">
+                            <!-- *ngIf="showPrice"/ -->
+                            <div class="col-md-6" >
+                                <input class="common"  autocomplete="off" formControlName="price" (keyup)="checkBiddingAmount()" matInput placeholder="Price" type="number" >                                  
+                                <mat-error *ngIf="submitted && productForm.controls.price.invalid">This field is required</mat-error>
+                            </div>
+                            <div class="col-md-6">
+                                <input autocomplete="off" class="common" formControlName="city" matInput placeholder="City" type="text">                              
+                                <mat-error *ngIf="submitted && productForm.controls.city.invalid">This field is required</mat-error>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="upload-image">
+                                    <label class="col-md-12 control-label upload"  for="filebutton">
+                                            <span>Drop file anywhere to upload</span>
+                                            <span>or</span>
+                                            <input id="filebutton" name="filebutton" #inputFile (change)="onSelectFile($event)" type="file" >
+                                            <span >(the file size must be less than 2MB)</span>
+                                    </label>
+                                </div>
+                                <div >
+                                    <img *ngFor="let url of urlArray"  [src]="url" height="70px" style="padding:10px;"> <br/>
+                                </div>
+                                <div class="note">
+                                     Note: “Ads with 1-4 photos get 5x more responses, use original photos. Avoid copying from internet ensure the item is properly visible from multiple angles. Accepted formats are .jpg, .gif & .png. Size < 2MB.
+                                    <br>Ensure that the image(s) does not contain any human face.”
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                               <mat-checkbox type='checkbox' (change)='enableDisable($event.checked)'>By clicking 'Submit' you agree to our Terms of Use & Posting Rules</mat-checkbox>>      
+                            </div>
+                        </div>
+                        <div class="button">
+                            <button mat-raised-button type="submit" [disabled]="enableProduct" class="btn btn-danger pull-right">Submit</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </div>
+
+                        <!-- <div class="part-3" *ngIf="formPart==3">
+                                <div class="backBtn">
+                                        <button (click)="changeBackFormProcess(2)" type="button"><i class="fas fa-arrow-left"></i></button>
+                                    </div>
+                             <div class="row">
+                                <div class="col-md-6">
+                                    <input matInput class="common" formControlName="phoneNumber" autocomplete="off" placeholder="Enter Phone Number" type="text">
+                                    <mat-error *ngIf="submitted && productForm.controls.phoneNumber.invalid">This field is required</mat-error>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-checkbox type='checkbox'  formControlName="allowNumber" >Make my number visible ?</mat-checkbox>      
+                                </div>
+                            </div>
+                            <div class="row" style="margin: 0;" *ngIf="allowBidding && priceSuitableForBidding">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" formControlName="bid" type="checkbox" (change)="setBidding($event)" >
+                                                    Wanna Bid on this product?
+                                                <span class="form-check-sign">
+                                                    <span class="check"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="bidEnable">
+                                    <div class="col-md-6">
+                                        <input matInput class="common" formControlName="bidamount" type="number" placeholder="Bidding Price">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input matInput class="common" formControlName="bidTime" type="date" placeholder="Last date for Bidiing">
+                                    </div>
+                                </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                   <input class="common"  autocomplete="off" formControlName="price" (keyup)="checkBiddingAmount()" matInput placeholder="Price" type="number" >                                  
+                                   <mat-error *ngIf="submitted && productForm.controls.price.invalid">This field is required</mat-error>
+                               </div>
+                               <div class="col-md-6">
+                                    <input autocomplete="off" class="common" formControlName="city" matInput placeholder="City" type="text">                              
+                                    <mat-error *ngIf="submitted && productForm.controls.city.invalid">This field is required</mat-error>
+                                </div>
+                            </div>
+                            <div class="button">
+                                    <button type="button" (click)="changeFormProcess(4)">Next</button>
+                                </div>
+                        </div> -->
+                                
+                                 <!-- <div class="col-md-4">
+                                    <div class="upload-image">
+                                      <label class="col-xs-8 control-label" style="color:darkturquoise;font-weight:bold"  for="filebutton">Attachments <span style="color:darkturquoise;font-weight:bold">(the file size must be less than 2MB)</span></label>
+                                           <input id="filebutton" name="filebutton" #inputFile (change)="onSelectFile($event)" type="file" >
+                                  </div>
+                                </div> -->
+
+                                <!-- <div class="part-4" *ngIf="formPart==4">
+                                        <div class="backBtn">
+                                                <button (click)="changeBackFormProcess(3)" type="button"><i class="fas fa-arrow-left"></i></button>
+                                            </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="upload-image">
+                                              <label class="col-md-12 control-label upload"  for="filebutton">
+                                                <span>Drop file anywhere to upload</span>
+                                                <span>or</span>
+                                                <input id="filebutton" name="filebutton" #inputFile (change)="onSelectFile($event)" type="file" >
+                                                <span >(the file size must be less than 2MB)</span>
+                                            </label> -->
+                                                   
+        
+                                                   <!-- <div class="form-group form-file-upload form-file-multiple">
+                                                      <input type="file" multiple="" class="inputFileHidden">
+                                                      <div class="input-group">
+                                                          <input type="text" class="form-control inputFileVisible" placeholder="Select Multiple File" multiple>
+                                                          <span class="input-group-btn">
+                                                              <button type="button" class="btn btn-fab btn-round btn-info">
+                                                                  <i class="material-icons">layers</i>
+                                                              </button>
+                                                          </span>
+                                                      </div>
+                                                    </div> -->
+        
+        
+                                          <!-- </div>
+                                        </div>
+                                    </div>
+        
+        
+                                     <div class="row">
+                                        <div class="col-md-12">
+                                                       <mat-checkbox type='checkbox' (change)='enableDisable($event.checked)'>By clicking 'Submit' you agree to our Terms of Use & Posting Rules</mat-checkbox>      
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="button">
+                                        <button mat-raised-button type="submit" [disabled]="enableProduct" class="btn btn-danger pull-right">Submit</button>
+                                    </div>
+                                <div class="clearfix"></div>
+                                </div> -->
+                     
+                        
+                
+         </div>
+    </div>
+</div>
+
+  

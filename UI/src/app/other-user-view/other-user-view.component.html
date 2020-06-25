@@ -1,0 +1,81 @@
+<div class="main">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="userImage">
+              <img class="userImage_default" src="../../assets/img/dummy.png" alt="">
+            </div>
+          </div>
+          <div class="col-sm-9 ">
+            <div class="user">
+              <h1 class="user_heading">Username Here</h1>
+              <hr>
+              <div class="user_publishAds">
+                <h4 class="user_publishAds_heading">Published Ads</h4>
+                <div class="row col-sm-12">
+                <div class="col-md-6 col-lg-4 col-sm-12" *ngFor="let product of productList">
+                        <div class="cardBlock">
+                            <a [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId}">
+                              <div class="product">
+                                <div class="product_image">
+                                    <img class="product_image_top" [src]="imageUrl+product.mainImage">
+                                 </div>
+                                 <div class="product_body">
+                                    <div class="product_admin">
+                                        <img class="product_admin_image" src="../../assets/img/dummy.png">
+                                     </div>
+                                     <div class="product_description">
+                                        <h5 class="product_description_tital">{{ product.prodName }}</h5>
+                                        <p class="product_description_city"><i class="fas fa-map-marker-alt"></i> {{ product.city | uppercase }} </p>
+                                     </div>
+                                     <div class="product_price">
+                                       <p class="product_price_1">₹ {{ product.price }}</p>
+                                     </div>
+                                 </div>
+                              </div>
+                             </a>
+                             <div class="product_action">
+                                <button (click)="reportedProduct(productView.prodId)" title=" Report this ad" class="mybutton" data-toggle="modal" data-target="#reportform" type="button">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                </button> 
+                                <button (click)="addToWishlist(productView.prodId)" title=" Add to Wishlist" class="mybutton" data-toggle="modal" type="button">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                              </div>
+                        </div>  
+                  <!-- <div class="card block">
+                            <a [routerLink]="[ '/home/productView']" [queryParams]="{ID:product.prodId}" skipLocationChange="true">
+                              <div class="imgBlock">
+                              <img  height="300" class="card-img-top" [src]="imageUrl+product.mainImage" >
+                                                            </div>
+                              <div class="card-body">
+                                  <h5 class="productTital">{{ product.prodName }}</h5>
+                                  <h6 class="productPrice">₹ {{ product.price }}</h6>
+                                  <p class="card-text">{{ product.prodDesc | slice:0:80 }}  </p>
+                              </div>
+                            </a>
+                            <div class="rightBtn">
+                                <button (click)="reportedProduct(product.prodId)" title=" Report this ad" class="mybutton" data-toggle="modal" data-target="#reportform" type="button">
+                                    <i class="material-icons">
+                                      report
+                                      </i>
+                                 </button>
+                                 <button (click)="addToWishlist(product.prodId)" title=" Add to Wishlist" class="mybutton" data-toggle="modal" type="button">
+                                  <i class="material-icons">
+                                    favorite_border
+                                    </i>
+                               </button>
+                            </div>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

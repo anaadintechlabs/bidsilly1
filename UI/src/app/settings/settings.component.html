@@ -1,0 +1,86 @@
+<div class="main">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3"></div>
+			<div class="col-sm-6 content">
+					<h1 style="padding-bottom: 10px;">Ads Settings</h1>
+					<div class="container-fluid">
+							<mat-slide-toggle style="padding-bottom: 35px;" [checked]="toggleChecked" (change)="changeSlider()">Show My Number Number in ads</mat-slide-toggle>
+						<div class="row">
+							<div class="col-md-12 headingct">
+								<strong>Change Password</strong>				
+							</div>		
+						</div>	
+						<form [formGroup]="changePasswordForm" (ngSubmit)="onSubmit()">
+					
+						<div class="row">
+							<div class="col-md-12 ptop15 pb10">
+								<mat-form-field floatPlaceholder="always">
+									<input matInput placeholder="Current Password" formControlName="oldPassword" type="password" autocomplete="new-Password" required>
+									<mat-error *ngIf="changePasswordForm.controls.oldPassword.invalid">Password must be of minimum 6 characters .</mat-error>
+										</mat-form-field>
+							  </div>
+					  </div>
+						
+						<div class="row">
+							<div class="col-md-12 ptop15 pb10">
+								<mat-form-field floatPlaceholder="always">
+									<input matInput placeholder="New Password" formControlName="newPassword" type="password" autocomplete="new-Password" required>
+									<mat-error *ngIf="changePasswordForm.controls.newPassword.invalid">Password must be of minimum 6 characters .</mat-error>
+										</mat-form-field>
+							  </div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 pb10 rpt10">
+								<mat-form-field floatPlaceholder="always">
+									<input matInput placeholder="Confirm Password" formControlName="confirmPassword" autocomplete="new-Password" type="password" required>
+									<mat-error *ngIf="changePasswordForm.controls.newPassword != changePasswordForm.controls.confirmPassword">Password doesn't match.</mat-error>
+										</mat-form-field>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 alignright  ptop10 pb10">
+								<button type="submit" mat-raised-button>Save</button>
+								<button type="button" (click)="closePopUp()" mat-button>Cancel</button>
+							</div>
+						</div>
+						</form>
+						</div>
+			</div>
+			<div class="col-sm-3">
+				 <div class="product_action">
+                  <button  title="Deactivate" class="mybutton" data-toggle="modal" data-target="#reportform" type="button">
+                      <i class="fas fa-exclamation-circle"></i>
+                  </button> 
+                 
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+  <div id="reportform" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Deactivate Account</h5>
+          <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+          <form role="form" [formGroup]="deactivateForm" (ngSubmit)="deactivateAndLogOut()">
+
+            <div class="form-group">
+              <input type="radio" formControlName="description" value="I Dont want to come">I Dont want to come<br>
+              <input type="radio" formControlName="description" value="Bad Expertiene"> Bad Expertiene<br>
+              <input type="radio" formControlName="description" value="Not so great">Not so great<br>
+              <input type="radio" formControlName="description" value="Will be back"> Will be back
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Deactivate</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

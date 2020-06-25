@@ -1,0 +1,102 @@
+
+ <div id="loginform" class="modal fade card-body login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered login animated" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+          <div class="box">
+              <div class="content">
+                 <div class="error"></div>
+                 <div class="form loginBox" *ngIf="showLoginForm">
+                    <h2 class="headingLogin">Login</h2>
+                    <form [formGroup]="authForm" (ngSubmit)="submitForm()">
+                      <div class="username">
+                          <i class="fas fa-user"></i>
+                          <input autocomplete="off" autofocus name="email" class="common formcontrol" formControlName="email" type="email"  id="organisationCode" placeholder="Enter Your Email" aria-describedby="nameHelp" >
+                          <small id="nameHelp" class="form-text text-muted"></small>
+                      </div>
+                      <div class="password">
+                          <i class="fas fa-key"></i>
+                          <input autocomplete="off" class="common" formControlName="password" type="password"  aria-describedby="nameHelp" placeholder="*********">
+                          <small id="nameHelp" class="form-text text-muted"></small>
+                      </div>
+                      <!-- <div class="left">
+                        <input type="checkbox" name="Remember Me" id=""> Remember Me
+                      </div> -->
+                      <div class="right">
+                        Forget Your Password?
+                      </div>
+                           <button type="submit" [disabled]="!authForm.valid" class="loginButton">Login</button>
+                      </form>
+                 </div>
+                 <div class="content registerBox" *ngIf="showRegistrationForm">
+                    <div class="form">
+                        <h2 class="headingLogin">Sign Up</h2>
+                        <form [formGroup]="signUpForm" (ngSubmit)="registerUser()" >
+                           <div class="username">
+                              <i class="fas fa-file-signature"></i>
+                              <input autocomplete="off" formControlName="name" placeholder="Full Name" type="text" class="common" id="inputEmail4" >
+                           </div>
+                           <div class="password">
+                              <i class="fas fa-user"></i>
+                              <input autocomplete="off" formControlName="username" placeholder="Username" type="text" class="common" id="inputEmail4" >
+                           </div>
+                           <div class="password">
+                              <i class="far fa-envelope"></i>
+                              <input autocomplete="off" formControlName="email" type="email" placeholder="Email" class="common" id="inputEmail4" >
+                            </div>
+                           <div class="password">
+                              <i class="fas fa-key"></i>
+                              <input autocomplete="off" formControlName="password" type="password" placeholder="Enter password" class="common" id="inputPassword4" >
+                            </div>      
+                            <button type="submit" [disabled]="!signUpForm.valid" class="loginButton">Sign Up</button>
+                          </form>
+                       </div>
+                   </div>
+                   <div class="socialbody">
+                     <h4>Login</h4>
+                     <p>With your social media account</p>
+                     <div class="social">
+                        <!-- <a class="circle github" href="#">
+                           <i class="fab fa-github"></i> Twitter
+                        </a> -->
+                        <a id="google_login" class="circle google" href="{{google_url}}">
+                              <i class="far fa-envelope"></i> Google
+                        </a>
+                        <a id="facebook_login" class="circle facebook" href="{{facebook_url}}">
+                           <i class="fab fa-facebook"></i> Facebook
+                        </a>
+                    </div>
+                    <hr>
+                   </div>
+                   <!-- <div class="division">
+                      <div class="line l"></div>
+                        <span>or</span>
+                      <div class="line r"></div>
+                  </div> -->
+                  
+              </div>
+         </div>
+      </div>
+      <div class="modal-footer">
+          <div class="forgot login-footer" *ngIf="showLoginForm">
+              <span style="font-size: 12px;">Don't you have an Account 
+                   <a (click)="changeForm('Resistration')" class="login-footer-link links">Register Now?</a>
+              </span>
+              <button (click)="changeForm('Resistration')" class="loginButton" style="margin-top: 10px;">Register Now</button>
+          </div>
+          <div class="forgot register-footer" *ngIf="showRegistrationForm" >
+               <span style="font-size: 12px;">Already have an account?
+               <a (click)="changeForm('Login')" class="login-footer-link links">Login</a>
+              </span>
+              <button (click)="changeForm('Login')" class="loginButton" style="margin-top: 10px;">Login</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+

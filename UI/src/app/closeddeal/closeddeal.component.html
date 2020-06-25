@@ -1,0 +1,58 @@
+<div class="main-content">
+  <div class="container">
+      <div class="header">
+          <div class="header_content">
+              <h3 class="header_content_heading">All Closed Deals</h3>
+          </div>
+          <div class="header_action">
+          </div>
+      </div>
+      <div class="row" *ngIf="action=='block'">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Closed Deals</h4>
+                      <p class="card-category">All Closed Deals</p>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table">
+                              <thead class=" text-primary">
+                                  
+                                <th>
+                                 Product Name
+                                </th>
+                                  <th>
+                                 Seller Name 
+                                  </th> 
+                                  <th>
+                                 Message 
+                                  </th>  
+                                 
+                                  <th>
+                                     Deal Date
+                                  </th>                               
+                                 
+                              </thead>
+                              <tbody>
+                                
+                                  <tr *ngFor="let closedDeal of closedDealList  | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }"> 
+                                    <td>{{ closedDeal.productModel.prodName}}</td>
+                                     <td> {{ closedDeal.seller.name }} </td>
+                                      <td>{{ closedDeal.message}}</td>
+                                   
+                                     <td>{{ closedDeal.dealDate | date }}</td>
+
+                                  </tr>
+                                     <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls> 
+                                     
+                                </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+     </div>
+ 
+  </div>
+</div>

@@ -1,0 +1,94 @@
+.header{
+    padding: 10px 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 6px 8px 13px 0px #0000004d;
+    &_content{
+        display: inline;
+        &_heading{
+            display: inline;
+            color: #868686;
+        }
+    }
+    &_action{
+        float: right;
+        padding: 14px 0;
+        width: 25%;
+        .mat-select{
+            display: inline-block;
+            width: 100%;
+            outline: 0;
+            padding: 10px 20px;
+            border: 1px solid;
+            margin-top: -10px;
+            border-radius: 5px;
+        }
+    }
+}
+.userDetail{
+    cursor: pointer;
+}
+th#img{
+    width: 10%
+}
+th#name{
+    width: 20%;
+}
+th#desc{
+    width: 25%;
+    
+}
+th#status{
+    width: 15%;
+}
+th#price{
+    width: 10%;
+}
+th#action{
+    width: 15%
+}
+th#act{
+    width: 5%
+}
+.actionSelect{
+    width: 25%;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+.common{
+    border:none;
+    box-shadow: none;
+    background: transparent;
+    padding: 5px 10px;
+    margin-right: 2px;
+    border-radius: 5px;
+    i{
+        color:white;
+    }
+}
+.approve{
+    background-color: #99d420;
+}
+.delete{
+    background-color: #f91942;
+}
+.watch{
+    background-color: #343a40;
+}
+.status{
+    font-size: 12px;
+    padding: 8px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: 600;
+}
+.applyBtn{
+    padding: 14px 30px;
+}
+tr:hover{
+    transition: all 0.5s;
+    backface-visibility: hidden;
+    box-shadow: 2px 2px 10px 0px #c7c7c7;
+    // transform: perspective(1px) translateZ(0);
+}

@@ -1,0 +1,652 @@
+<div class="container" id="main">
+  <div class="row">
+    <div class="col-sm-12 col-md-4 col-lg-3 page-sidebar">
+      <aside>
+        <div class="sidebar-box">
+          <div class="user">
+            <figure>
+              <a href="#"><img [src]="imageUrl+user.imageUrl" alt=""></a>
+            </figure>
+          <div class="usercontent">
+            <h3>{{user.userName}}</h3>
+            <h4>{{ user.email }}</h4>
+          </div>
+        </div>
+        <nav class="navdashboard">
+          <ul>
+            <li>
+              <a [ngClass]="{'active': currentValue=='dashboard'}" (click)="productView('dashboard')">
+                <i class="fas fa-tachometer-alt"></i>
+                  <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a [ngClass]="{'active': currentValue=='Profile Setting'}" (click)="productView('Profile Setting')">
+                <i class="fas fa-cogs"></i>
+                  <span>Profile Settings</span>
+              </a>
+            </li>
+            <li>
+              <a [ngClass]="{'active': currentValue=='My Ads'}" (click)="productView('My Ads')">
+                <i class="fas fa-ad"></i>
+                  <span>My Ads</span>
+              </a>
+            </li>
+            <li>
+              <a [ngClass]="{'active': currentValue=='My Bids'}" (click)="productView('My Bids')">
+                <i class="fab fa-accusoft"></i>
+                  <span>My Bids</span>
+              </a>
+            </li>
+            <li>
+              <a [ngClass]="{'active': currentValue=='WishList'}" (click)="productView('WishList')">
+                <i class="fa fa-heart"></i>
+                <span>My Wishlist</span>
+              </a>
+            </li>
+            <li>
+            <li>
+              <a (click)="logOutUser()">
+                <i class="fas fa-sign-out-alt"></i>
+                  <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        </div>
+      </aside>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+        <div class="main-content">
+      <div class="container-fluid">
+          <div class="header">
+              <div class="header_content">
+                  <h2 class="header_content_heading" *ngIf="currentValue=='dashboard'">DashBoard</h2>
+                  <h2 class="header_content_heading" *ngIf="currentValue=='My Ads'">My Ads</h2>
+                  <h2 class="header_content_heading" *ngIf="currentValue=='WishList'">WishList</h2>
+                  <h2 class="header_content_heading" *ngIf="currentValue=='My Bids'">My Bids</h2>
+                  <h2 class="header_content_heading" *ngIf="currentValue=='Profile Setting'">Profile Setting</h2>
+              </div>
+              <div class="header_action" *ngIf="currentValue=='dashboard' || currentValue=='My Ads'">
+                  <button (click)="productView('Approved Ads')">Approve</button>
+                  <button (click)="productView('Rejected Ads')">Rejected</button>
+                  <button (click)="productView('Expired Ads')">Expired</button>
+                  <button (click)="productView('UnApproved Ads')">UnApproved</button>
+                   <!-- <mat-select [value]="currentValue" placeholder="Choose Action" (selectionChange)="productView($event.value)">
+                      <mat-option  value="My Ads" >My Ads</mat-option>
+                      <mat-option  value="Approved Ads" >Approved Ads</mat-option>
+                      <mat-option  value="Rejected Ads" >Rejected Ads</mat-option>
+                      <mat-option  value="UnApproved Ads" >UnApproved Ads</mat-option>
+                      <mat-option  value="Expired Ads" >Expired Ads</mat-option>
+                      <mat-option  value="WishList" >WishList</mat-option>
+                  </mat-select>       -->
+              </div>
+              <div class="header_action" *ngIf="currentValue=='Profile Setting'">
+                  <button (click)="productView('edit')">Edit Profile</button>
+                  <button (click)="productView('password')">Change Password</button>
+                  <button data-toggle="modal" data-target="#deactivate" type="button">Deactivate Account</button>
+              </div>
+          </div>
+          <div class="col-md-12 " *ngIf="currentValue != 'My Bids' && currentValue != 'Profile Setting'" >
+              <div class="display_action">
+                  <button (click)="changeDisplay('block')"  class="header_action_button" [ngClass]="{'active': id===1}" (click)="isClicked(1)">
+                          <i class="fas fa-th"></i>
+                  </button>
+                  <button (click)="changeDisplay('list')" class="header_action_button" [ngClass]="{'active': id===2}" (click)="isClicked(2)">
+                          <i class="fas fa-th-list"></i>
+                  </button>            
+                  <button (click)="changeDisplay('table')" class="header_action_button" [ngClass]="{'active': id===3}" (click)="isClicked(3)">
+                      <i class="fas fa-clipboard-list"></i>
+                  </button>            
+              </div>
+              <div class="card" *ngIf="display=='table'">
+                  <!-- <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Pending Products</h4>
+                      <p class="card-category"> Products are pending for Approvel.</p>
+                  </div> -->
+                  <div class="card-body" *ngIf="allProductList && allProductList.length>0">
+                    <div class="table-responsive">
+                        <table class="table" *ngIf="view !='WishList'">
+                          <thead class=" text-primary">
+                              <th id="img">Image</th>
+                              <th id="name">Product Name</th>
+                              <th id="desc"> Description</th>
+                              <th id="status">Bid Status</th>
+                              <th id="status"> Status</th>
+                              <th id="price">Price</th>
+                              <th id="action">Actions</th>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let productList of allProductList | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }">
+                              <td> <img [src]="imageUrl+productList.mainImage" style="width:100px;"></td>
+                              <td> {{ productList.prodName | titlecase }} </td>
+                              <td> {{ productList.prodDesc | slice:0:180 }}</td>
+                              <td *ngIf="productList.bid">
+                                <button data-toggle="modal" (click)="getAllBidsOfProduct(productList.prodId)" data-target="#mybidsDetail" class="showBid">Show Bids</button>
+                              </td>
+                              <td *ngIf="!productList.bid">Not Biddable</td>
+                              <td>
+                                <span *ngIf="productList.status=='APPROVED'" class="status approve">{{ productList.status}}</span>
+                                <span *ngIf="productList.status=='DELETED'" class="status delete">{{ productList.status}}</span>
+                                <span *ngIf="productList.status=='NEW'" class="status watch">PENDING</span>
+                                <span *ngIf="productList.status!='NEW' &&  productList.status!='DELETED' && productList.status!='APPROVED'" class="status watch">{{ productList.status}}</span>
+                              </td>
+                              <td>? {{ productList.price }}  </td>
+                              <td>
+                                <!-- <button (click)="approveProductByid(productList.prodId)" class="common approve" *ngIf="productList.status=='NEW'"><i class="far fa-heart"></i></button> -->
+                                <button (click)="deleteReportedProductById(productList.prodId)" class="common delete" *ngIf="productList.status!='DELETED'"><i class="far fa-trash-alt"></i></button>
+                                <!-- <button class="common watch" *ngIf="currentValue!='My Products' && productList.status!='NEW'" [routerLink]="['/home/productView']" [queryParams]="{ID:productList.prodId,action:'myads'}"><i class="far fa-eye"></i></button> -->
+                                <!-- <button class="common watch" *ngIf="currentValue!='My Products' && productList.status=='NEW'" [routerLink]="['/home/productView']" [queryParams]="{ID:productList.prodId,action:'approve'}"><i class="far fa-eye"></i></button> -->
+                                <button  *ngIf="currentValue=='My Ads' || currentValue=='dashboard'" class="common watch"  [routerLink]="['/home/productView']" [queryParams]="{ID:productList.prodId,action:'myads'}"><i class="far fa-eye"></i></button>
+                               <button  *ngIf="currentValue!='My Ads' && currentValue!='dashboard'" class="common watch"  [routerLink]="['/home/productView']" [queryParams]="{ID:productList.prodId,action:'view'}"><i class="far fa-eye"></i></button>
+ 
+                              </td>
+                            </tr>
+                            <pagination-controls  (pageChange)="pageChanged($event)"></pagination-controls>
+                          </tbody>
+                        </table>
+                        <table class="table" *ngIf="view=='WishList'">
+                          <thead class=" text-primary">
+                              <th id="img">Image</th>
+                              <th id="name">Product Name</th>
+                              <th id="desc"> Description</th>
+                              <th id="status"> Status</th>
+                              <th id="price">Price</th>
+                              <th id="action">Actions</th>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let productList of allProductList | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }">
+                              <td> <img  [src]="imageUrl+productList.prodId.mainImage" style="width:100px;"></td>
+                              <td> {{ productList.prodId.prodName | titlecase }} </td>
+                              <td> {{ productList.prodId.prodDesc | slice:0:180 }}</td>
+                              <td>
+                                <span *ngIf="productList.prodId.status=='APPROVED'" class="status approve">{{ productList.prodId.status}}</span>
+                                <span *ngIf="productList.prodId.status=='DELETED'" class="status delete">{{ productList.prodId.status}}</span>
+                                <span *ngIf="productList.prodId.status=='NEW'" class="status watch">PENDING</span>
+                                <span *ngIf="productList.prodId.status!='NEW' &&  productList.prodId.status!='DELETED' && productList.prodId.status!='APPROVED'" class="status watch">{{ productList.status}}</span>
+                              </td>
+                              <td>₹ {{ productList.prodId.price }}  </td>
+                              <td>
+                                <!-- <button (click)="approveProductByid(productList.prodId)" class="common approve" *ngIf="productList.status=='NEW'"><i class="far fa-heart"></i></button> -->
+                                <button class="common delete" (click)="reportedProduct(product.prodId.prodId)" title=" Report this ad" data-toggle="modal" data-target="#reportform" type="button">
+                                    <i class="fas fa-exclamation-circle"></i></button>
+                                <!-- <button class="common watch" *ngIf="currentValue!='My Products' && productList.status!='NEW'" [routerLink]="['/admin/productView']" [queryParams]="{ID:productList.prodId,action:'myads'}"><i class="far fa-eye"></i></button> -->
+                                <!-- <button class="common watch" *ngIf="currentValue!='My Products' && productList.status=='NEW'" [routerLink]="['/admin/productView']" [queryParams]="{ID:productList.prodId,action:'approve'}"><i class="far fa-eye"></i></button> -->
+                                <button class="common watch"  [routerLink]="['/home/productView']" [queryParams]="{ID:productList.prodId.prodId,action:'view'}"><i class="far fa-eye"></i></button>
+                                </td>
+                            </tr>
+                            <pagination-controls  (pageChange)="pageChanged($event)"></pagination-controls>
+                          </tbody>
+                        </table>
+    
+                        
+                    </div>
+                  </div>   
+              </div>
+              <div class="row" *ngIf="display=='block'">
+                      <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12" *ngFor="let product of allProductList">
+                          <div class="cardBlock" *ngIf="view!='WishList'">
+                            <div class="product">
+                             
+
+                               <a  *ngIf="currentValue=='My Ads' || currentValue=='dashboard'" [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId,action:'myads'}">
+                                  <div class="product_image">
+                                      <img class="product_image_top" [src]="imageUrl+product.mainImage">
+                                   </div>
+                               </a>
+                                <a  *ngIf="currentValue!='My Ads' && currentValue !='dashboard'" [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId,action:'view'}">
+                                  <div class="product_image">
+                                      <img class="product_image_top" [src]="imageUrl+product.mainImage">
+                                   </div>
+                               </a>
+                                   <div class="product_body">
+                                      <div class="product_admin">
+                                          <img class="product_admin_image" src="../../assets/img/dummy.png">
+                                       </div>
+                                       <div class="product_description">
+                                          <h5 class="product_description_tital">{{ product.prodName }}</h5>
+                                          <p class="product_description_city"><i class="fas fa-map-marker-alt"></i> {{ product.city | uppercase }} </p>
+                                          <p class="product_description_date"><i class="fas fa-clock"></i> {{ product.createdDate | date }}</p>
+                                          <p class="product_description_catDetails"> <i class="fas fa-tag"></i> {{ product.category.catName }} > {{ product.subCategory.catName }}</p>
+                                       </div>
+                                       <div class="product_price">
+                                         <p class="product_price_1">Price: ? {{ product.price }}</p>
+                                       </div>
+                                   </div>
+                                </div>
+                               <div class="product_action">
+                                  <button (click)="deleteProduct(product.prodId)" title=" Delete this ad" class="mybutton" type="button">
+                                      <i class="fas fa-trash-alt"></i>
+                                  </button> 
+                                  <!-- <button (click)="addToWishlist(product.prodId)" title=" Add to Wishlist" class="mybutton" data-toggle="modal" [attr.data-target]="login" type="button">
+                                      <i class="far fa-heart"></i>
+                                  </button> -->
+                                </div>
+                                
+                          </div>
+                          <div class="cardBlock" *ngIf="view=='WishList'">
+                              <div class="product">
+                                 <a [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId.prodId,action:'view'}">
+                                    <div class="product_image">
+                                        <img class="product_image_top" [src]="imageUrl+product.prodId.mainImage">
+                                     </div>
+                                 </a>
+                                     <div class="product_body">
+                                        <div class="product_admin">
+                                            <img class="product_admin_image" src="../../assets/img/dummy.png">
+                                         </div>
+                                         <div class="product_description">
+                                            <h5 class="product_description_tital">{{ product.prodId.prodName }}</h5>
+                                            <p class="product_description_city"><i class="fas fa-map-marker-alt"></i> {{ product.prodId.city | uppercase }} </p>
+                                            <p class="product_description_date"><i class="fas fa-clock"></i> {{ product.prodId.createdDate | date }}</p>
+                                            <p class="product_description_catDetails"> <i class="fas fa-tag"></i> {{ product.prodId.category.catName }} > {{ product.prodId.subCategory.catName }}</p>
+                                         </div>
+                                         <div class="product_price">
+                                           <p class="product_price_1">Price: ? {{ product.prodId.price }}</p>
+                                         </div>
+                                     </div>
+                                  </div>
+                                 <div class="product_action">
+                                    <button (click)="reportedProduct(product.prodId.prodId)" title=" Report this ad" class="mybutton" data-toggle="modal" data-target="#reportform" type="button">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                    </button> 
+                                  </div>
+                                  
+                            </div>
+                      </div>
+                  <div class="row col-sm-12"  *ngIf="count>limit">
+                    <button   type="button" class="loadmore btn btnbox btn-danger" (click)="loadMoreProducts()">Load More</button>
+                  </div>
+              </div>
+              <div *ngIf="display=='list'">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngFor="let product of allProductList">
+                      <div class="featured-box" *ngIf="view!='WishList'">
+                        <figure>
+                          <!-- <div class="icon"> -->
+                              <!-- <button (click)="addToWishlist(product.prodId)" class="icon" title=" Add to Wishlist"  data-toggle="modal" [attr.data-target]="login" type="button">
+                                  <i class="far fa-heart"></i>
+                              </button> -->
+                          <!-- </div> -->
+                          <a *ngIf="currentValue=='My Ads' || currentValue=='dashboard'" [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId,action:'myads'}"><img class="img-fluid" [src]="imageUrl+product.mainImage"></a>
+
+                          <a *ngIf="currentValue!='My Ads' && currentValue !='dashboard'" [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId,action:'view'}"><img class="img-fluid" [src]="imageUrl+product.mainImage"></a>
+                        </figure>
+                      <div class="feature-content">
+                        <div class="tg-product">
+                            {{ product.category.catName}} > {{ product.subCategory.catName }}
+                        </div>
+                      <h4><a href="ads-details.html">{{ product.prodName }}</a></h4>
+                          <span>Last Updated: {{ product.createdDate | date }}</span>
+                            <ul class="address">
+                              <li>
+                                  <i class="fas fa-map-marker-alt"></i> {{ product.city }}
+                              </li>
+                              <li>
+                                  <i class="fas fa-clock"></i> {{ product.createdDate | date }}
+                              </li>
+                              <li>
+                                  <i class="fas fa-user"></i> User Name
+                              </li>
+                              <li>
+                                  <i class="fas fa-tag"></i> {{ product.subCategory.catName }}
+                              </li>
+                            </ul>
+                            <div class="description">
+                              <p>{{product.prodDesc | slice:0:80 }}</p>
+                            </div>
+                            <div class="btn-list">
+                                <a class="btn-price" (click)="deleteProduct(product.prodId)" title=" Report this ad" >
+                                    <i class="fas fa-trash-alt"></i> Delete Ad</a>
+                                <a *ngIf="currentValue!='My Ads' && currentValue !='dashboard'" [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId,action:'view'}" class="btn btn-common">
+                                  ₹ {{product.price}}
+                                </a>
+                                <a *ngIf="currentValue=='My Ads' || currentValue =='dashboard'" [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId,action:'view'}" class="btn btn-common">
+                                  ₹ {{product.price}}
+                                </a>
+                            </div>
+                          </div>
+                    </div>
+                    <div class="featured-box" *ngIf="view=='WishList'">
+                        <figure>
+                          <!-- <div class="icon">
+                              <button (click)="addToWishlist(product.prodId.prodId)" class="icon" title=" Add to Wishlist"  data-toggle="modal" [attr.data-target]="login" type="button">
+                                  <i class="far fa-trash-alt"></i>
+                              </button>
+                          </div> -->
+                          <a [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId.prodId,action:'view'}">
+                            <img class="img-fluid" [src]="imageUrl+product.prodId.mainImage"></a>
+                        </figure>
+                      <div class="feature-content">
+                        <div class="tg-product">
+                            {{ product.prodId.category.catName}} > {{ product.prodId.subCategory.catName }}
+                        </div>
+                      <h4><a href="ads-details.html">{{ product.prodId.prodName }}</a></h4>
+                          <span>Last Updated: {{ product.prodId.createdDate | date }}</span>
+                            <ul class="address">
+                              <li>
+                                  <i class="fas fa-map-marker-alt"></i> {{ product.prodId.city }}
+                              </li>
+                              <li>
+                                  <i class="fas fa-clock"></i> {{ product.prodId.createdDate | date }}
+                              </li>
+                              <li>
+                                  <i class="fas fa-user"></i> User Name
+                              </li>
+                              <li>
+                                  <i class="fas fa-tag"></i> {{ product.prodId.subCategory.catName }}
+                              </li>
+                            </ul>
+                            <div class="description">
+                              <p>{{product.prodId.prodDesc | slice:0:80 }}</p>
+                            </div>
+                            <div class="btn-list">
+                                <a class="btn-price" (click)="reportedProduct(product.prodId.prodId)" title=" Report this ad" data-toggle="modal" data-target="#reportform">
+                                    <i class="fas fa-exclamation-circle"></i> Report Ad</a>
+                                <a class="btn btn-common" [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId.prodId,action:'view'}">
+                                ? {{product.prodId.price}}
+                                </a>
+                            </div>
+                          </div>
+                    </div>
+                    </div>
+                <!-- <div class="col-sm-12" *ngFor="let product of productList">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="image col-sm-3">
+                          <img class="myImg" [src]="imageUrl+product.mainImage">
+                        </div>
+                        <div class="col-sm-6 detail">
+                          <h3 class="productTital">{{ product.prodName }}</h3>
+                          <h6 class="productPrice">Price : INR.{{ product.price }}</h6>
+                          <p class="card-text">{{ product.prodDesc | slice:0:40}} </p>
+                        </div>
+                        <div class="col-sm-2">
+                          <button (click)="reportedProduct(product.prodId)" class="btn add subCatBtn">Report Product</button>
+                          <button (click)="addToWishlist(product.prodId)" class="btn add subCatBtn">Add to Wishlist</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+              <!-- <div *ngIf="allProductList.length>0">
+                <mat-select  placeholder="Choose Action" class="actionSelect" (selectionChange)="productAction($event.value)">
+                    <mat-option  value="Approve Products" *ngIf="view !='Approved Products'">Approve Products</mat-option>
+                    <mat-option  value="Delete Products" >Delete Products</mat-option>
+                    <mat-option  value="Hold Products" >Hold Products</mat-option>
+                </mat-select>
+                <button  (click)="performAction()"  class="btn approve applyBtn" type="submit">Apply</button>
+              </div> -->
+              <div class="card">
+                  <div class="card-body" *ngIf="allProductList && allProductList.length==0">
+                      <h3 *ngIf="currentValue=='My Ads' && view=='All Products'">You haven't posted any ad since now.</h3>
+                      <h3 *ngIf="currentValue=='WishList'">There is no product in your Wishlist.</h3>
+                      <h3 *ngIf="currentValue=='dashboard' && view=='All Products'">You haven't posted any ad since now.</h3>
+                      <h3 *ngIf="view=='Approved Ads'">There is no Approved Products.</h3>
+                      <h3 *ngIf="view=='Rejected Ads'">There is no rejected product to display.</h3>
+                      <h3 *ngIf="view=='UnApproved Ads'">There is no UnApproved product to display.</h3>
+                      <h3 *ngIf="view=='Expired Ads'">There is no Expired product to display.</h3>
+                    </div>
+              </div>
+          </div>
+          <div class="col-md-12 " *ngIf="currentValue == 'My Bids'">
+              <div class="card">
+                  <!-- <div class="card-header card-header-danger">
+                      <h4 class="card-title ">All Bids</h4>
+                      <p class="card-category"> All bids posted by You.</p>
+                  </div> -->
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table">
+                              <thead class=" text-primary">
+                                  
+                                <th>
+                                  Product Image
+                                </th>
+                                  <th>
+                                    Product Name
+                                  </th>  
+                                  <th>
+                                    Bid Ammount
+                                  </th>
+                                  <th>
+                                    Comment  
+                                  </th>
+                                  <th>
+                                      Bid Date
+                                  </th>                               
+                                  <!-- <th>
+                                    Action
+                                  </th> -->
+                              </thead>
+                              <tbody>
+                                  <tr *ngFor="let bid of bidList | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }"> 
+                                     <!-- <tr *ngFor="let user of userList  | paginate: { itemsPerPage: limit, currentPage: offset,totalItems: count }">  -->
+                                   
+                                      <td> <a style="color: #02c2ef !important;" [routerLink]="['/home/productView']" [queryParams]="{ID:bid.product.prodId}"><img [src]="imageUrl+bid.product.mainImage" style="width: 100px;" alt=""></a></td>
+                                     <td>{{ bid.product.prodName}}</td>
+                                     <td> {{ bid.bidAmount }} </td>
+                                     <td>{{ bid.comment }}</td>
+                                     <td>{{ bid.bidDate | date }}</td>
+
+                                      <!-- <td>
+                                            <button (click)="deleteReportedProduct()" title=" Delete Product" class="btn add subCatBtn" type="submit">
+                                                     <i class="fa fa-plus-circle"></i> 
+                                                    Delete Product
+                                                </button>
+                                      </td> -->
+
+                            
+                                  </tr>
+                                  <pagination-controls  (pageChange)="pageChanged($event)"></pagination-controls>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div> 
+          <div class="col-md-12" *ngIf="currentValue=='Profile Setting'">
+              <div class="row" *ngIf="profileView=='edit'">
+                  <div class="col-sm-6 col-md-8 content">
+                      <div class="heading">
+                          <!-- <h1 class="headingLogin">Edit Profile</h1> -->
+                      </div>
+                      <div class="form">
+                          <form [formGroup]="userForm" (ngSubmit)="submitForm()">
+                              <div class="username com">
+                                  <input autocomplete="off" autofocus  class="commo formcontrol" formControlName="name" placeholder="Enter Name" aria-describedby="nameHelp" >
+                                  <i class="fas fa-user"></i>
+                                  <small id="nameHelp" class="form-text text-muted"></small>
+                              </div>
+                              <div class="password com">
+                                  <input autocomplete="off"  formControlName="bio" type="text" class="commo formcontrol" aria-describedby="nameHelp" placeholder="Enter Your Bio">
+                                  <i class="far fa-address-card"></i>
+                                  <small id="nameHelp" class="form-text text-muted"></small>
+                              </div>
+          
+          
+                              <div class="username com">
+                                  <input autocomplete="off" autofocus  class="commo formcontrol" formControlName="email" type='email' readonly  aria-describedby="nameHelp" >
+                                  <i class="fas fa-envelope"></i> 
+                                  <small id="nameHelp" class="form-text text-muted"></small>
+                              </div>
+                              <div class="password com">
+                                  <input autocomplete="off"  formControlName="phoneNumber"  class="commo formcontrol" aria-describedby="nameHelp" placeholder="Enter Phone Number">
+                                  <i class="fas fa-phone"></i>
+                                  <small id="nameHelp" class="form-text text-muted"></small>
+                              </div>
+                              <div class="product_image" *ngIf='!directUrl'>
+                                  <img class="product_image_top" style="width:80%;" [src]="imageUrl+user.imageUrl">
+                              </div>
+                              <div class="product_image" *ngIf='directUrl'>
+                                <img class="product_image_top" [src]="user.imageUrl">
+                              </div>
+                                      <div class="upload-image">
+                                          <label class=" control-label upload"  for="filebutton">
+                                                  <span>Drop file anywhere to upload <br></span>
+                                                  <span>or<br></span>
+                                                  <input id="filebutton" name="filebutton" #inputFile (change)="onSelectFile($event)" type="file" >
+                                                  <span ><br>(the file size must be less than 2MB)</span>
+                                          </label>
+                                      </div>
+                                      <div>
+                                          <img  *ngFor="let url of urlArray" [src]="url" height="70px" style="padding:10px;"> <br/>
+                                      </div>
+                                  
+                              
+                                   <button type="submit" [disabled]="!userForm.valid" class="saveButton">Save Changes</button>
+                              </form>
+                      </div>
+                      <div class="msg">
+                              MESSAGE: - “We believe in socializing with others, help your connections to get to know more about yourself. Tell them your interest and your favourite things, you would love to know them too…” 
+                      </div>
+                  </div>
+              </div> 
+              <div class="row" *ngIf="profileView=='password'">
+                  <div class="col-sm-6 content">
+                      <h1 style="padding-bottom: 10px;">Ads Settings</h1>
+                      <div class="container-fluid">
+                          <mat-slide-toggle style="padding-bottom: 35px;" [checked]="toggleChecked" (change)="changeSlider()">Show My Number Number in ads</mat-slide-toggle>
+                        <div class="row">
+                          <div class="col-md-12 headingct">
+                            <strong>Change Password</strong>				
+                          </div>		
+                        </div>	
+                        <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmit()">
+                      
+                        <div class="row">
+                          <div class="col-md-12 ptop15 pb10">
+                            <mat-form-field floatPlaceholder="always">
+                              <input matInput placeholder="Current Password" formControlName="oldPassword" type="password" autocomplete="new-Password" required>
+                              <mat-error *ngIf="changePasswordForm.controls.oldPassword.invalid">Password must be of minimum 6 characters .</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                          <div class="col-md-12 ptop15 pb10">
+                            <mat-form-field floatPlaceholder="always">
+                              <input matInput placeholder="New Password" formControlName="newPassword" type="password" autocomplete="new-Password" required>
+                              <mat-error *ngIf="changePasswordForm.controls.newPassword.invalid">Password must be of minimum 6 characters .</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 pb10 rpt10">
+                            <mat-form-field floatPlaceholder="always">
+                              <input matInput placeholder="Confirm Password" formControlName="confirmPassword" autocomplete="new-Password" type="password" required>
+                              <mat-error *ngIf="changePasswordForm.controls.newPassword != changePasswordForm.controls.confirmPassword">Password doesn't match.</mat-error>
+                                </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 alignright  ptop10 pb10">
+                            <button type="submit" mat-raised-button>Save</button>
+                            <button type="button" (click)="closePopUp()" mat-button>Cancel</button>
+                          </div>
+                        </div>
+                        </form>
+                        </div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="mybidsDetail" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">All Bids on this Product</h5>
+        <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+          <table class="table" *ngIf=" bidsOnProductList && bidsOnProductList.length>0">
+              <thead class=" text-primary">
+                  <th>Bidder Name</th>
+                  <th>Bidder Number</th>  
+                  <th>Bid Amount</th>
+                  <th>Bid Date</th>
+                  <th>Comment</th>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let bid of bidsOnProductList"> 
+                      <td>{{ bid.user.name }}</td>
+                      <td>{{ bid.user.phoneNumber }}</td>
+                      <td>{{ bid.bidAmount }}</td>
+                      <td>{{ bid.bidDate|date }}</td>
+                      <td>{{ bid.comment }}</td>
+                  </tr>
+              </tbody>
+          </table>
+          <p *ngIf="bidsOnProductList && bidsOnProductList.length==0">Sorry, There is no bids For this Product now.</p>  
+        </div>
+    </div>
+  </div>
+</div>
+
+<div id="deactivate" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Deactivate Account</h5>
+          <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+          <form role="form" [formGroup]="deactivateForm" (ngSubmit)="deactivateAndLogOut()">
+
+            <div class="form-group">
+              <input type="radio" formControlName="description" value="I Dont want to come">I Dont want to come<br>
+              <input type="radio" formControlName="description" value="Bad Expertiene"> Bad Expertiene<br>
+              <input type="radio" formControlName="description" value="Not so great">Not so great<br>
+              <input type="radio" formControlName="description" value="Will be back"> Will be back
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Deactivate</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="reportform" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Report this ad</h5>
+            <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <form role="form" [formGroup]="reportedAdForm" (ngSubmit)="reportFormOnSubmit()">
+    
+              <div class="form-group">
+                <input type="radio" formControlName="description" value="Offensive Content"> Offensive Content<br>
+                <input type="radio" formControlName="description" value="Duplicate Ad"> Duplicate Ad<br>
+                <input type="radio" formControlName="description" value="Already Sold Product"> Already Sold Product<br>
+                <input type="radio" formControlName="description" value="Damaged Product"> Damaged Product
+               
+              </div>
+              <div class="form-group">
+                <label for="inputAddress2">Comment</label>
+                <input required type="text" autocomplete="off" formControlName="comment" class="form-control" id="productDesc" placeholder="">
+              </div>
+              <button type="submit" class="btn btn-primary">Report</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+code.txt
+Displaying code.txt.

@@ -1,0 +1,258 @@
+<div class="main">
+    <div class="container">
+        <div class="row view">
+            <div class="col-sm-12 col-md-7 ">
+                <div class="carousal">
+
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner" *ngIf="productView.imgNames" >
+                          <div class="carousel-item fix-size active">
+                            <img class="d-block  w-100" [src]="imageUrl+productView.mainImage" alt="First slide">
+                          </div>
+                          <div class="carousel-item fix-size" *ngFor="let images of productView.imgNames | splitkey">
+                            <img class="d-block  w-100" [src]="imageUrl+images" alt="Second slide">
+                          </div>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="col-sm-12">
+                        <div id="carouselExample" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner" *ngIf="productView.imgNames" >
+                              <div class="carousel-item active" >
+                                  <img class="myImg" *ngFor="let images of productView.imgNames | splitkey" [src]="imageUrl+images" alt="Second slide">
+                              </div>
+                            <a class="smallCarusal carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="smallCarusal carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Next</span>
+                            </a>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="priceTag">
+                        <p>₹ {{productView.price}}</p>
+                      </div>
+                </div>
+                
+                          
+                 <!-- <div class="description"> 
+                    <div class="details" *ngIf="attributeMap">
+                      <h4 class="details_heading">Details</h4>
+                      <div class="row">
+                        <div class="col-sm-5">
+                            <ul>
+                                <li *ngFor="let attribute of attributeMap">
+                                  <p class="name"><i class="fas fa-star-of-life"></i> {{attribute.attributeName}} :</p>
+                                  <p class="value">{{attribute.attributeValue}}</p>
+                                 </li>
+                              </ul>
+                        </div>
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-5"></div>
+                      </div>
+                      <hr style="margin-top:0;">
+                    </div>
+                  <h2 class="description_heading">Description</h2>
+                  <p class="description_detail">{{productView.prodDesc}}</p>
+                </div> -->
+              </div>
+              <div class="col-sm-12 col-md-5">
+                <div class="detail">
+                  <h2 class="detail_heading">{{ productView.prodName }}</h2>
+                  <p class="detail_description">{{productView.prodDesc}}</p>
+                  <div class="detail_meta">
+                      <span><i class="far fa-clock"></i> {{  productView.createdDate  | date }}</span>
+                      <span><i class="fas fa-map-marker-alt"></i> {{  productView.city }}</span>
+                      </div>
+                </div>
+                <h3 class="detail_heading">Specifications</h3>
+                <div class="detail_specification">
+                    <ul class="detail_list">
+                        <li *ngFor="let attribute of attributeMap">
+                            <p class="name"><i class="far fa-arrow-alt-circle-right"></i> {{attribute.attributeName}} : {{attribute.attributeValue}}</p>
+                        </li>
+                    </ul>      
+                </div>
+                <div class="detail_category">
+                  <p>Type : <span style="color: #999; font-weight:400; text-transform: capitalize;">{{ productView.category.catName}}, {{ productView.subCategory.catName}}</span></p>
+                  <p>Bid Enabled : <span style="color: #999; font-weight:400; text-transform: capitalize;">{{ productView.bid}}</span></p>
+                  <p>Likes : <span style="color: #999; font-weight:400; text-transform: capitalize;">{{ productView.likes}}</span></p>
+                  <p>Views : <span style="color: #999; font-weight:400; text-transform: capitalize;">{{ productView.views}}</span></p>
+                </div>
+                 <div class="actions" *ngIf="productView.status=='SOLD' ">
+                    <h4 class="user_details_heading">This Product is Marked as Sold</h4>
+                </div>
+                <div class="actions" *ngIf="action!='myads'">
+                  <div class="product_action">
+                      <button *ngIf="action!='report' " (click)="approveProductByid(productView.prodId)" title=" Approve this Ad" class="mybutton"  type="button">
+                            <i class="far fa-thumbs-up"></i>
+                      </button> 
+                      <button *ngIf="action!='report'  " (click)="deleteNewProductById(productView.prodId)" title="Delete this Ad" class="mybutton"  type="button">
+                            <i class="fas fa-trash-alt"></i>
+                      </button>
+                          <button *ngIf="action!='approve'" (click)="deleteReportedProduct()" title="Delete this Ad" class="mybutton"  type="button">
+                            <i class="fas fa-trash-alt"></i>
+                      </button>
+              </div>
+                   
+                   <button   class="call"><i class="fas fa-phone"></i>  {{productView.phoneNumber}}</button>
+                </div>
+                   <div class="actions" *ngIf="action=='myads' && bidsOnProductList && bidsOnProductList.length>0  ">
+                  <button data-toggle="modal" data-target="#mybidsDetail" class="showBid">Show All Bids</button>
+                </div>
+                <div class="actions" *ngIf=" !productView.bid && action=='myads' && intrestOnProductList && intrestOnProductList.length>0  ">
+                  <button data-toggle="modal" data-target="#myIntrestDetail" class="showBid">Show All Intrested Person</button>
+                </div>
+                <!--BIDS TABLE CLOSEDd  -->
+                <div class="actions" *ngIf="action=='myads' && productView.status!='SOLD' ">
+                    <button  (click)="openClosedDeal(productView.prodId)" data-toggle="modal" data-target="#closedDeal" class="buy">Mark as Sold</button>
+                </div>
+      
+      
+      
+              </div>
+        </div>
+      
+      
+
+           <div id="closedDeal" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Tell us how u sold the product?</h5>
+                <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form role="form" [formGroup]="closedDealForm" (ngSubmit)="closedDealFormOnSubmit()">
+                   <div class="form-group">
+                  <input type="radio" formControlName="message" value="Met the buyer on portal"> Met the buyer on portal<br>
+                  <input type="radio" formControlName="message" value="Sold to a bidder on portal">Sold to a bidder on portal<br>
+                  <input type="radio" formControlName="message" value="Sold the product outside of portal">Sold the product outside of portal<br>
+                  <input type="radio" formControlName="message" value="Item is not available anymore">Item is not available anymore<br>
+                  <input type="radio" formControlName="message" value="Don't want to sell the product anymore">Don't want to sell the product anymore
+                  </div>
+                  
+                  <button type="submit" (click)="closepopup('closedDeal')" class="btn btn-primary">Mark as sold</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+      
+        <div class="row">
+          <div class="col-md-7">
+              <div class="description"> 
+                <h2 class="description_heading" >Description</h2>
+                <p class="description_detail">{{productView.prodDesc}}</p>
+              </div>
+          </div>
+          <div class="col-md-5">
+              <div class="user_details">
+                  <h4 class="user_details_heading" style="display: block; margin-bottom:20px; ">Seller Description</h4>
+                  <!-- <a [routerLink]="['/home/userview']" [queryParams]="{ID:productView.userId}"> -->
+                  <img class="user_details_image" src="../../assets/img/dummy.png" alt="">
+                  <h4 class="user_details_heading">{{ productView.userId.name }}<br>
+                    <!-- <a href="">More Ads From User</a> -->
+                  </h4>
+                <!-- </a> -->
+
+                </div>
+          </div>
+        </div>
+      
+      </div>
+</div>
+
+  <div id="myIntrestDetail" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title"  id="exampleModalLongTitle">User who shows intrest</h5>
+                  
+                  <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table" *ngIf=" intrestOnProductList && intrestOnProductList.length>0">
+                        <thead class=" text-primary">
+                            <th>User Name</th>
+                            <th>User Number</th>  
+                            <!-- <th>Bid Amount</th> -->
+                            <th> Date</th>
+                            <!-- <th *ngIf='showOtherBidDetails'>Comment</th> -->
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let bid of intrestOnProductList"> 
+                                <td>{{ bid.user.name }}</td>
+                                <td >{{ bid.phoneNumber }}</td>
+                                <!-- <td>{{ bid.bidAmount }}</td> -->
+                                <td>{{ bid.intrestDate|date }}</td>
+                                <!-- <td *ngIf='showOtherBidDetails'>{{ bid.comment }}</td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p *ngIf="intrestOnProductList.length==0">Sorry, There is no intrest For this Product now.</p>  
+                  </div>
+              </div>
+            </div>
+          </div>
+
+
+
+   <div id="mybidsDetail" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">All Bids on this Product</h5>
+                  <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <table class="table" *ngIf="bidsOnProductList && bidsOnProductList.length>0">
+                        <thead class=" text-primary">
+                            <th>Bidder Name</th>  
+                            <th>Email Id</th>  
+                             <th>Bidder Number</th> 
+                            <th>Bid Amount</th>
+                            <th>Bid Date</th>
+                            <th>Comment</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let bid of bidsOnProductList"> 
+                                <td>{{ bid.user.name }}</td>
+                                <td> {{ bid.user.email }} </td>
+                                <td *ngIf="bid.user.phoneNumber == null"> No Contact No. provided</td>
+                                <td *ngIf="bid.user.phoneNumber != null">{{ bid.user.phoneNumber }}</td>                       
+                                <td>{{ bid.bidAmount }}</td>
+                                <td>{{ bid.bidDate|date }}</td>
+                                <td>{{ bid.comment }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p *ngIf="bidsOnProductList.length==0">Sorry, There is no bids For this Product now.</p>  
+                  </div>
+              </div>
+            </div>
+          </div>

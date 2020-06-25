@@ -1,0 +1,119 @@
+<!-- <div class="main-content">
+    <div class="container-fluid">
+      <div class="viewHeader">
+        <div class="content">
+          <p>View :</p>
+          <button (click)="changeView('block')" class="btn myBtn btn-fab btn-fab-mini btn-round">
+                  <i class="material-icons">dashboard</i>
+          </button>
+          <button (click)="changeView('list')" class="btn myBtn btn-fab btn-fab-mini btn-round">
+                  <i class="material-icons">reorder</i>
+          </button>
+        </div>
+        <hr>
+      </div>
+  
+      <div class="row" *ngIf="view=='block'">
+          <div class="col-md-4 col-lg-3 col-sm-6 col-xs-12" *ngFor="let product of productList">
+            <div class="cardBlock">
+                <a [routerLink]="['/home/productView']" [queryParams]="{ID:product,action:'edit'}">
+                  <div class="product">
+                    <div class="product_image">
+                        <img class="product_image_top" [src]="imageUrl+product.mainImage">
+                     </div>
+                     <div class="product_body">
+                        <div class="product_admin">
+                            <img class="product_admin_image" src="../../assets/img/dummy.png">
+                         </div>
+                         <div class="product_description">
+                            <h5 class="product_description_tital">{{ product.prodName }}</h5>
+                            <p class="product_description_city"><i class="fas fa-map-marker-alt"></i> {{ product.city | uppercase }} </p>
+                         </div>
+                         <div class="product_price">
+                           <p class="product_price_1">₹ {{ product.price }}</p>
+                           <p class="product_price_1">₹ {{ product.status }}</p>
+                         </div>
+                     </div>
+                  </div>
+                 </a>
+                
+                  
+            </div>
+          </div>
+          <div class="row col-sm-12">
+              <button  type="button" class="loadmore" (click)="loadMoreProducts()">Load More</button>
+            </div>
+      </div>
+  
+     
+    
+      <div class="row" *ngIf="view=='list'">
+        <div class="col-sm-12" *ngFor="let product of productList">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="image col-sm-3">
+                  <img class="myImg" [src]="imageUrl+product.mainImage">
+                </div>
+                <div class="col-sm-6 detail">
+                  <h3 class="productTital">{{ product.prodName }}</h3>
+                  <h6 class="productPrice">Price : INR.{{ product.price }}</h6>
+                  <h6 class="productPrice">{{ product.status }}</h6>
+                  <p class="card-text">{{ product.prodDesc | slice:0:40}} </p>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   -->
+  
+  
+   <div class="main">
+      <div class="container">
+          <div class="col-sm-12" >
+            <h2 class="heading">My Posted Ads</h2>
+            <hr style="width: 60px;margin-bottom: 50px;border-top: 1px solid #b7ff24;">
+          </div>
+          <div class="row">
+              <div class="col-sm-3" *ngFor="let product of productList">
+                  <div class="cardBlock" >
+                      <a [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId ,action:'myads'}">
+                        <div class="product">
+                          <div class="product_image">
+                              <img class="product_image_top" [src]="imageUrl+product.mainImage">
+                           </div>
+                           <div class="product_body">
+                              <div class="product_admin">
+                                  <img class="product_admin_image" src="../../assets/img/dummy.png">
+                               </div>
+                               <div class="product_description">
+                                  <h5 class="product_description_tital">{{ product.prodName }}</h5>
+                                  <p class="product_description_city"><i class="fas fa-map-marker-alt"></i> {{ product.city | uppercase }} </p>
+                               </div>
+                               <div class="product_price">
+                                 <p class="product_price_1">₹ {{ product.price }}</p>
+                               </div>
+                           </div>
+                        </div>
+                       </a>
+                       <div class="product_action">
+                          <!-- <button (click)="reportedProduct(product.prodId)" title=" Report this ad" class="mybutton" data-toggle="modal" data-target="#reportform" type="button">
+                              <i class="fas fa-exclamation-circle"></i>
+                          </button>  -->
+                          <!-- <button (click)="removeAd(product.prodId)" title=" Remove Ad" class="mybutton" type="button"> -->
+                              <!-- <i class="fas fa-trash-alt"></i> -->
+                          <!-- </button> -->
+                        </div>
+                        
+                  </div>
+              </div>
+              <div class="row col-sm-12" >
+                  <button   type="button" class="loadmore btn btnbox btn-danger" (click)="loadMoreProducts()">Load More</button>
+                </div>
+          </div>
+      </div>
+      
+  </div> 

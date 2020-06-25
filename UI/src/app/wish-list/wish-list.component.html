@@ -1,0 +1,75 @@
+<div class="main">
+    <div class="container">
+        <div class="col-sm-12" >
+          <h2 class="heading">My Wishlist</h2>
+          <hr style="width: 60px;margin-bottom: 50px;border-top: 1px solid #b7ff24;">
+        </div>
+        <div class="row">
+            <div class="col-sm-3" *ngFor="let product of allWishList">
+                <div class="cardBlock" >
+                    <a [routerLink]="['/home/productView']" [queryParams]="{ID:product.prodId.prodId ,action:'view'}">
+                      <div class="product">
+                        <div class="product_image">
+                            <img class="product_image_top" [src]="imageUrl+product.prodId.mainImage">
+                         </div>
+                         <div class="product_body">
+                            <div class="product_admin">
+                                <img class="product_admin_image" src="../../assets/img/dummy.png">
+                             </div>
+                             <div class="product_description">
+                                <h5 class="product_description_tital">{{ product.prodId.prodName }}</h5>
+                                <p class="product_description_city"><i class="fas fa-map-marker-alt"></i> {{ product.prodId.city | uppercase }} </p>
+                             </div>
+                             <div class="product_price">
+                               <p class="product_price_1">₹ {{ product.prodId.price }}</p>
+                             </div>
+                         </div>
+                      </div>
+                     </a>
+                     <div class="product_action">
+                        <button (click)="reportedProduct(product.prodId.prodId)" title=" Report this ad" class="mybutton" data-toggle="modal" data-target="#reportform" type="button">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </button> 
+                        <!-- <button (click)="deleteFromWishlist(product.prodId.prodId)" title=" Remove From Wishlist" class="mybutton" type="button">
+                            <i class="fas fa-trash-alt"></i>
+                        </button> -->
+                      </div>
+                      
+                </div>
+            </div>
+            <div class="row col-sm-12">
+                <button   type="button" class="loadmore btn btnbox btn-danger" (click)="loadMoreProducts()">Load More</button>
+              </div>
+        </div>
+    </div>
+    
+</div> 
+<div id="reportform" class="modal fade card-body" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Report this ad</h5>
+          <button type="button" class="close" #closeAddExpenseModal data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+          <form role="form" [formGroup]="reportedAdForm" (ngSubmit)="reportFormOnSubmit()">
+  
+            <div class="form-group">
+              <input type="radio" formControlName="description" value="Offensive Content"> Offensive Content<br>
+              <input type="radio" formControlName="description" value="Duplicate Ad"> Duplicate Ad<br>
+              <input type="radio" formControlName="description" value="Already Sold Product"> Already Sold Product<br>
+              <input type="radio" formControlName="description" value="Damaged Product"> Damaged Product
+             
+            </div>
+            <div class="form-group">
+              <label for="inputAddress2">Comment</label>
+              <input required type="text" autocomplete="off" formControlName="comment" class="form-control" id="productDesc" placeholder="">
+            </div>
+            <button type="submit" class="btn btn-primary">Report</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
